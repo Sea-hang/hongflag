@@ -1,0 +1,33 @@
+{
+	"$schema": "node_modules/wrangler/config-schema.json",
+	"main": ".open-next/worker.js",
+	"name": "school-website",
+	"compatibility_date": "2026-07-08",
+	"compatibility_flags": [
+		"nodejs_compat",
+		"global_fetch_strictly_public"
+	],
+	"assets": {
+		"directory": ".open-next/assets",
+		"binding": "ASSETS"
+	},
+	"services": [
+		{
+			"binding": "WORKER_SELF_REFERENCE",
+			"service": "school-website"
+		}
+	],
+	"images": {
+		"binding": "IMAGES"
+	},
+	"kv_namespaces": [
+		{
+			"binding": "ACTIVITIES_STORE",
+			"id": "6da29e320dad45119764e73cba307b18"
+		},
+		{
+			"binding": "SETTINGS_STORE",
+			"id": "6da29e320dad45119764e73cba307b18"
+		}
+	]
+}
