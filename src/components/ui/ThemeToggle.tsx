@@ -16,7 +16,7 @@ export function ThemeToggle() {
   return (
     <button
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      className="relative w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--bg-tertiary)] transition-colors"
+      className="relative w-9 h-9 rounded-full flex items-center justify-center hover:bg-[var(--color-paper-3)] transition-colors"
       aria-label={isDark ? "切换亮色模式" : "切换暗色模式"}
     >
       <motion.svg
@@ -25,7 +25,7 @@ export function ThemeToggle() {
         animate={{ rotate: 0, scale: 1 }}
         exit={{ rotate: 90, scale: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="w-5 h-5 text-[var(--text-primary)]"
+        className="w-5 h-5 text-[var(--color-ink)]"
         fill="none"
         viewBox="0 0 24 24"
         stroke="currentColor"

@@ -4,10 +4,9 @@ import { guideContent } from "@/data/guide-content";
 
 // 简单的 Markdown → HTML 转换
 function renderMarkdown(md: string): string {
-  // 先转义 HTML
   let html = md;
 
-  // 代码块（```...```）
+  // 代码块
   html = html.replace(/```(\w*)\n([\s\S]*?)```/g,
     (_, lang, code) => `<pre class="code-block"><code>${code.trim()}</code></pre>`);
 
@@ -23,10 +22,10 @@ function renderMarkdown(md: string): string {
   // 粗体
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
 
-  // 链接 [text](url)
+  // 链接
   html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
 
-  // 图片 ![alt](url) — 目前没有但万一有
+  // 图片
   html = html.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1">');
 
   // 水平线
@@ -35,7 +34,7 @@ function renderMarkdown(md: string): string {
   // 引用
   html = html.replace(/^> (.+)$/gm, '<blockquote>$1</blockquote>');
 
-  // 表格：找出连续的 | 行并包裹
+  // 表格
   html = html.replace(/((?:^\|.+\|\n?)+)/gm, (block: string) => {
     const rows = block.trim().split('\n').filter(r => !r.match(/^\|[\s-:|]+\|$/));
     const cells = rows.map(row =>
@@ -45,16 +44,12 @@ function renderMarkdown(md: string): string {
     return `<table>${cells}</table>`;
   });
 
-  // 无序列表项
+  // 列表
   html = html.replace(/^- (.+)$/gm, '<li>$1</li>');
-
-  // 有序列表项
   html = html.replace(/^\d+\. (.+)$/gm, '<li>$1</li>');
-
-  // 把分散的 <li> 包裹成 <ul>
   html = html.replace(/((?:<li>.*<\/li>\n?)+)/g, '<ul>$1</ul>');
 
-  // 段落：连续的非空、非特殊行
+  // 段落
   const lines = html.split('\n');
   const result: string[] = [];
   let paragraph: string[] = [];
@@ -68,11 +63,7 @@ function renderMarkdown(md: string): string {
 
   for (const line of lines) {
     const trimmed = line.trim();
-    if (!trimmed) {
-      flushPara();
-      continue;
-    }
-    // 已经是 HTML 标签的行直接输出
+    if (!trimmed) { flushPara(); continue; }
     if (/^<(h[1-4]|pre|ul|li|\/ul|table|tr|td|hr|blockquote|img)/.test(trimmed) ||
         /^<p>/.test(trimmed) ||
         /^<(h[1-4]|pre|ul|li|\/ul|table|tr|td|hr|blockquote|img)/.test(result[result.length - 1] || '')) {
@@ -95,27 +86,168 @@ export default function GuidePage() {
       <GlassNav />
       <main className="pt-28 pb-16">
         <article className="max-w-3xl mx-auto px-5">
+          {/* 页面标题 */}
+          <div className="mb-10 pb-8" style={{ borderBottom: "2px solid var(--color-rule)" }}>
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-accent)" }} />
+              <span className="text-[12px] font-medium tracking-[0.12em] uppercase text-[var(--color-accent)]">
+                入学指南
+              </span>
+            </div>
+            <h1
+              className="text-[var(--text-display-s)] font-bold tracking-tight leading-[1.1]"
+              style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
+            >
+              入学指南
+            </h1>
+          </div>
+
           <style>{`
-            .guide-content h1 { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 24px; line-height: 1.2; }
-            .guide-content h2 { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-top: 40px; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-            .guide-content h3 { font-size: 17px; font-weight: 600; color: var(--text-primary); margin-top: 28px; margin-bottom: 8px; }
-            .guide-content h4 { font-size: 15px; font-weight: 600; color: var(--text-secondary); margin-top: 20px; margin-bottom: 6px; }
-            .guide-content p { color: var(--text-secondary); line-height: 1.8; margin-bottom: 12px; font-size: 15px; }
-            .guide-content strong { color: var(--text-primary); }
-            .guide-content a { color: var(--accent); text-decoration: underline; }
-            .guide-content a:hover { opacity: 0.8; }
-            .guide-content hr { border: none; border-top: 1px solid var(--border); margin: 32px 0; }
-            .guide-content blockquote { border-left: 3px solid var(--accent); padding: 8px 16px; margin: 16px 0; background: var(--bg-secondary); border-radius: 0 8px 8px 0; color: var(--text-secondary); font-size: 14px; }
-            .guide-content ul { list-style: disc; padding-left: 24px; margin: 8px 0 16px; }
-            .guide-content li { color: var(--text-secondary); line-height: 1.8; font-size: 15px; }
-            .guide-content table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
-            .guide-content td { border: 1px solid var(--border); padding: 10px 14px; color: var(--text-secondary); }
-            .guide-content td:first-child { font-weight: 600; color: var(--text-primary); white-space: nowrap; }
-            .guide-content .code-block { background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; overflow-x: auto; margin: 16px 0; font-size: 13px; line-height: 1.7; }
-            .guide-content .code-block code { color: var(--text-primary); }
-            .guide-content .inline-code { background: var(--bg-secondary); padding: 2px 6px; border-radius: 4px; font-size: 13px; color: var(--accent); }
+            .guide-content {
+              font-family: var(--font-body);
+              color: var(--color-ink-2);
+              line-height: 1.9;
+              font-size: 15px;
+            }
+            .guide-content h1 {
+              font-family: var(--font-display);
+              font-size: 28px;
+              font-weight: 800;
+              color: var(--color-ink);
+              margin-bottom: 20px;
+              line-height: 1.25;
+              letter-spacing: -0.01em;
+            }
+            .guide-content h2 {
+              font-family: var(--font-display);
+              font-size: 22px;
+              font-weight: 700;
+              color: var(--color-ink);
+              margin-top: 44px;
+              margin-bottom: 14px;
+              padding-bottom: 8px;
+              border-bottom: 1px solid var(--color-rule);
+            }
+            .guide-content h3 {
+              font-family: var(--font-display);
+              font-size: 17px;
+              font-weight: 600;
+              color: var(--color-ink);
+              margin-top: 32px;
+              margin-bottom: 10px;
+            }
+            .guide-content h4 {
+              font-family: var(--font-display);
+              font-size: 15px;
+              font-weight: 600;
+              color: var(--color-ink-2);
+              margin-top: 24px;
+              margin-bottom: 8px;
+            }
+            .guide-content p {
+              color: var(--color-ink-2);
+              line-height: 1.9;
+              margin-bottom: 14px;
+              font-size: 15px;
+            }
+            .guide-content strong {
+              color: var(--color-ink);
+              font-weight: 600;
+            }
+            .guide-content a {
+              color: var(--color-accent);
+              text-decoration: underline;
+              text-underline-offset: 2px;
+              text-decoration-thickness: 1px;
+              transition: opacity 0.2s;
+            }
+            .guide-content a:hover {
+              opacity: 0.75;
+            }
+            .guide-content hr {
+              border: none;
+              border-top: 1px solid var(--color-rule);
+              margin: 36px 0;
+            }
+            .guide-content blockquote {
+              border-left: 3px solid var(--color-accent);
+              padding: 12px 20px;
+              margin: 20px 0;
+              background: var(--color-paper-2);
+              border-radius: 0 12px 12px 0;
+              color: var(--color-ink-2);
+              font-size: 14px;
+              font-style: italic;
+            }
+            .guide-content ul {
+              list-style: none;
+              padding: 0;
+              margin: 12px 0 20px;
+            }
+            .guide-content li {
+              position: relative;
+              padding-left: 20px;
+              color: var(--color-ink-2);
+              line-height: 1.8;
+              font-size: 15px;
+              margin-bottom: 4px;
+            }
+            .guide-content li::before {
+              content: "";
+              position: absolute;
+              left: 4px;
+              top: 11px;
+              width: 5px;
+              height: 5px;
+              border-radius: 50%;
+              background: var(--color-accent);
+              opacity: 0.5;
+            }
+            .guide-content table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 20px 0;
+              font-size: 14px;
+              border-radius: 12px;
+              overflow: hidden;
+              border: 1px solid var(--color-rule);
+            }
+            .guide-content th, .guide-content td {
+              border: 1px solid var(--color-rule);
+              padding: 10px 16px;
+              color: var(--color-ink-2);
+            }
+            .guide-content td:first-child {
+              font-weight: 600;
+              color: var(--color-ink);
+              white-space: nowrap;
+              background: var(--color-paper-2);
+            }
+            .guide-content .code-block {
+              background: var(--color-paper-2);
+              border: 1px solid var(--color-rule);
+              border-radius: 12px;
+              padding: 16px 20px;
+              overflow-x: auto;
+              margin: 20px 0;
+              font-size: 13px;
+              line-height: 1.7;
+              font-family: var(--font-mono);
+            }
+            .guide-content .code-block code {
+              color: var(--color-ink);
+            }
+            .guide-content .inline-code {
+              background: var(--color-paper-2);
+              padding: 2px 7px;
+              border-radius: 5px;
+              font-size: 13px;
+              color: var(--color-accent);
+              font-family: var(--font-mono);
+              border: 1px solid var(--color-rule);
+            }
             @media (max-width: 640px) {
-              .guide-content h1 { font-size: 26px; }
+              .guide-content h1 { font-size: 24px; }
               .guide-content h2 { font-size: 19px; }
               .guide-content td:first-child { white-space: normal; }
             }

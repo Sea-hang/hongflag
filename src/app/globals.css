@@ -1,88 +1,155 @@
 @import "tailwindcss";
 
-/* ===== Apple Liquid Glass 主题 ===== */
+/* ============================================================
+   红旗实验学校 · Braindrop 灵感设计
+   暖奶油色 + 深海军蓝 + 靛紫点缀
+   Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5
+   设计系统: design.md (project root)
+   ============================================================ */
+
 :root {
-  --bg-primary: #ffffff;
-  --bg-secondary: #f5f5f7;
-  --bg-tertiary: #e8e8ed;
-  --text-primary: #1d1d1f;
-  --text-secondary: #86868b;
-  --text-tertiary: #aeaeb2;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --accent-light: #dbeafe;
-  --border: rgba(0, 0, 0, 0.06);
-  --glass-bg: rgba(255, 255, 255, 0.72);
-  --glass-border: rgba(0, 0, 0, 0.08);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.08);
-  --star-color: rgba(0, 0, 0, 0.08);
+  /* Braindrop 灵感色板 */
+  --color-paper:         oklch(97% 0.012 80);
+  --color-paper-2:       oklch(94% 0.008 80);
+  --color-paper-3:       oklch(89% 0.006 80);
+  --color-ink:           oklch(15% 0.02 270);
+  --color-ink-2:         oklch(38% 0.025 270);
+  --color-ink-3:         oklch(52% 0.02 270);
+  --color-rule:          oklch(86% 0.01 80);
+  --color-accent:        oklch(52% 0.18 280);
+  --color-accent-2:      oklch(44% 0.18 280);
+  --color-accent-light:  oklch(72% 0.10 280);
+  --color-accent-deep:   oklch(32% 0.20 285);
+  --color-focus:         oklch(55% 0.15 280);
+  --color-card:          oklch(99% 0.005 80);
+
+  /* 字体 */
+  --font-display: "Noto Serif SC", "new-spirit", Georgia, serif;
+  --font-body:    "Noto Sans SC", "Figtree", "Inter", system-ui, -apple-system, sans-serif;
+  --font-mono:    "JetBrains Mono", "Noto Sans Mono", monospace;
+
+  /* 间距 4pt */
+  --space-3xs: 0.25rem;  --space-2xs: 0.5rem;  --space-xs: 0.75rem;
+  --space-sm:  1rem;     --space-md:  1.5rem;  --space-lg: 2rem;
+  --space-xl:  3rem;     --space-2xl: 4.5rem;  --space-3xl: 7rem;
+
+  /* 字号 — 借鉴 Braindrop 的 clamp 方式 */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.9375rem;
+  --text-md: 1.125rem;
+  --text-lg: 1.3125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: clamp(1.5rem, 1rem + 2vw, 2.25rem);
+  --text-display-s: clamp(2rem, 1rem + 3.5vw, 3.5rem);
+  --text-display: clamp(2.5rem, 1.25rem + 4vw, 5.625rem);
+
+  /* 动效 */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --dur-short: 200ms;
+  --dur-md: 300ms;
+  --dur-long: 500ms;
+
+  /* 圆角 */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+
+  /* 玻璃效果 */
+  --glass-bg: rgba(255, 255, 255, 0.82);
+  --glass-border: rgba(0, 0, 0, 0.05);
+  --glass-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+
+  /* 阴影 */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.08);
+
+  /* 星空 */
+  --star-color: rgba(0, 0, 0, 0.06);
 }
 
 .dark {
-  --bg-primary: #0a0a0f;
-  --bg-secondary: #12121a;
-  --bg-tertiary: #1c1c28;
-  --text-primary: #f5f5f7;
-  --text-secondary: #98989d;
-  --text-tertiary: #6e6e73;
-  --accent: #5580ff;
-  --accent-hover: #6b90ff;
-  --accent-light: rgba(85, 128, 255, 0.15);
-  --border: rgba(255, 255, 255, 0.08);
-  --glass-bg: rgba(18, 18, 26, 0.72);
-  --glass-border: rgba(255, 255, 255, 0.1);
-  --star-color: rgba(255, 255, 255, 0.5);
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.2);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.4);
+  --color-paper:         oklch(10% 0.008 275);
+  --color-paper-2:       oklch(13% 0.008 275);
+  --color-paper-3:       oklch(18% 0.008 275);
+  --color-ink:           oklch(93% 0.008 80);
+  --color-ink-2:         oklch(70% 0.008 80);
+  --color-ink-3:         oklch(55% 0.008 80);
+  --color-rule:          oklch(22% 0.008 275);
+  --color-accent:        oklch(65% 0.16 280);
+  --color-accent-2:      oklch(56% 0.16 280);
+  --color-accent-light:  oklch(30% 0.12 280);
+  --color-accent-deep:   oklch(25% 0.15 285);
+  --color-card:          oklch(15% 0.008 275);
+  --color-focus:         oklch(65% 0.15 280);
+  --glass-bg: rgba(13, 13, 20, 0.82);
+  --glass-border: rgba(255, 255, 255, 0.06);
+  --glass-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+  --star-color: rgba(255, 255, 255, 0.35);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12px 36px rgba(0, 0, 0, 0.4);
 }
 
 @theme inline {
-  --color-bg-primary: var(--bg-primary);
-  --color-bg-secondary: var(--bg-secondary);
-  --color-bg-tertiary: var(--bg-tertiary);
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-tertiary);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
-  --color-accent-light: var(--accent-light);
-  --color-border: var(--border);
+  --color-bg-primary: var(--color-paper);
+  --color-bg-secondary: var(--color-paper-2);
+  --color-bg-tertiary: var(--color-paper-3);
+  --color-text-primary: var(--color-ink);
+  --color-text-secondary: var(--color-ink-2);
+  --color-text-tertiary: var(--color-ink-3);
+  --color-accent: var(--color-accent);
+  --color-accent-hover: var(--color-accent-2);
+  --color-accent-light: var(--color-accent-light);
+  --color-border: var(--color-rule);
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-sans: var(--font-body);
+  --font-display: var(--font-display);
 
-  --animate-fade-up: fade-up 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  --animate-fade-in: fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  --animate-fade-up: fade-up 0.7s var(--ease-out) forwards;
+  --animate-fade-in: fade-in 0.8s var(--ease-out) forwards;
+  --animate-scale-in: scale-in 0.5s var(--ease-out) forwards;
 }
 
 @keyframes fade-up {
-  from { opacity: 0; transform: translateY(40px); }
+  from { opacity: 0; transform: translateY(24px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
 }
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes ripple {
+  to { transform: scale(12); opacity: 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
 
 body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   transition: background-color 0.4s ease, color 0.4s ease;
 }
 
-::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar { width: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--text-tertiary); border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: var(--color-ink-3); border-radius: 3px; }
 
 *:focus-visible {
-  outline: 2px solid var(--accent);
+  outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -94,7 +161,8 @@ body {
 
 .glass {
   background: var(--glass-bg);
-  backdrop-filter: saturate(180%) blur(20px);
-  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(16px);
+  -webkit-backdrop-filter: saturate(180%) blur(16px);
   border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-shadow);
 }

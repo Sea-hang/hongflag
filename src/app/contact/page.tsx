@@ -10,7 +10,7 @@ const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   visible: (i = 0) => ({
     opacity: 1, y: 0,
-    transition: { delay: i * 0.1, duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] as const },
   }),
 };
 
@@ -27,46 +27,80 @@ export default function ContactPage() {
   }, []);
 
   const mapImage = settingsImg || contactData.mapImage;
+
   return (
     <>
       <GlassNav />
-      <main className="pt-24 pb-16">
-        <section className="max-w-5xl mx-auto px-5 pt-12 pb-10 text-center">
-          <motion.p
+      <main className="pt-28 pb-16">
+        {/* ===== 信笺式头部 ===== */}
+        <section className="max-w-3xl mx-auto px-5 pt-16 pb-6">
+          <motion.div
             custom={0} initial="hidden" animate="visible" variants={fadeUp}
-            className="text-[13px] font-medium text-[var(--accent)] tracking-wide mb-3"
+            className="flex items-center gap-3 mb-4"
           >
-            {contactData.label}
-          </motion.p>
+            <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-accent)" }} />
+            <span className="text-[12px] font-medium tracking-[0.12em] uppercase text-[var(--color-accent)]">
+              {contactData.label}
+            </span>
+          </motion.div>
+
           <motion.h1
             custom={1} initial="hidden" animate="visible" variants={fadeUp}
-            className="text-[36px] md:text-[48px] font-bold tracking-tight text-[var(--text-primary)]"
+            className="text-[var(--text-display-s)] font-bold tracking-tight leading-[1.1] mb-4"
+            style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
           >
             {contactData.title}
           </motion.h1>
+
+          {/* 信笺问候语 */}
+          <motion.div
+            custom={2} initial="hidden" animate="visible" variants={fadeUp}
+            className="mt-8 p-6 rounded-2xl border-l-4"
+            style={{
+              background: "var(--color-paper-2)",
+              borderColor: "var(--color-accent)",
+            }}
+          >
+            <p className="text-[15px] leading-relaxed" style={{ color: "var(--color-ink-2)" }}>
+              如有任何疑问或建议，欢迎通过以下方式与我们取得联系。
+              学校全体教职工将竭诚为您服务。
+            </p>
+          </motion.div>
         </section>
 
+        {/* ===== 联系信息 + 地图 ===== */}
         <section className="max-w-5xl mx-auto px-5 pb-20">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-            {/* Contact info */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
+            {/* 联系信息 */}
             <div className="space-y-6">
               {contacts.map((item, i) => (
                 <motion.div
                   key={item.label}
-                  custom={i + 2}
+                  custom={i + 3}
                   initial="hidden"
                   animate="visible"
                   variants={fadeUp}
-                  className="flex items-start gap-4"
+                  className="flex items-start gap-4 group"
                 >
-                  <div className={`w-11 h-11 ${item.color} rounded-xl flex items-center justify-center text-lg flex-shrink-0`}>
+                  <div
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-lg flex-shrink-0 transition-colors duration-300"
+                    style={{
+                      background: "var(--color-accent-light)",
+                      color: "var(--color-accent)",
+                    }}
+                  >
                     {item.icon}
                   </div>
-                  <div>
-                    <h3 className="font-semibold text-[var(--text-primary)] text-[15px]">
+                  <div className="pt-1">
+                    <h3
+                      className="font-bold text-[15px] mb-1"
+                      style={{ color: "var(--color-ink)", fontFamily: "var(--font-display)" }}
+                    >
                       {item.label}
                     </h3>
-                    <p className="text-[14px] text-[var(--text-secondary)] mt-0.5 whitespace-pre-line">
+                    <p className="text-[14px] whitespace-pre-line leading-relaxed"
+                      style={{ color: "var(--color-ink-2)" }}
+                    >
                       {item.value}
                     </p>
                   </div>
@@ -74,27 +108,39 @@ export default function ContactPage() {
               ))}
             </div>
 
-            {/* Map / School image */}
+            {/* 地图/学校图片 */}
             <motion.div
-              custom={6}
+              custom={8}
               initial="hidden"
               animate="visible"
               variants={fadeUp}
-              className="bg-[var(--bg-secondary)] rounded-3xl min-h-[320px] overflow-hidden"
+              className="rounded-2xl overflow-hidden border min-h-[360px]"
+              style={{
+                borderColor: "var(--color-rule)",
+                background: "var(--color-paper-2)",
+              }}
             >
               {mapImage ? (
                 <img
                   src={mapImage}
                   alt="学校位置"
-                  className="w-full h-full object-cover min-h-[320px]"
+                  className="w-full h-full object-cover min-h-[360px] transition-transform duration-700 hover:scale-105"
                 />
               ) : (
-                <div className="w-full h-full min-h-[320px] flex items-center justify-center">
-                  <div className="text-center text-[var(--text-secondary)]">
-                    <div className="text-5xl mb-4">🗺️</div>
-                    <p className="text-[15px] font-medium text-[var(--text-primary)]">{contactData.mapTitle}</p>
-                    <p className="text-[13px] mt-1">{contactData.mapCity}</p>
-                    <p className="text-[13px]">{contactData.mapStreet}</p>
+                <div className="w-full h-full min-h-[360px] flex items-center justify-center">
+                  <div className="text-center px-6">
+                    <div className="text-5xl mb-4 opacity-60">🏫</div>
+                    <h4 className="text-[16px] font-bold mb-2"
+                      style={{ color: "var(--color-ink)", fontFamily: "var(--font-display)" }}
+                    >
+                      {contactData.mapTitle}
+                    </h4>
+                    <p className="text-[14px]" style={{ color: "var(--color-ink-2)" }}>
+                      {contactData.mapCity}
+                    </p>
+                    <p className="text-[14px]" style={{ color: "var(--color-ink-2)" }}>
+                      {contactData.mapStreet}
+                    </p>
                   </div>
                 </div>
               )}

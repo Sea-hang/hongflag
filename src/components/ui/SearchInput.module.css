@@ -5,13 +5,13 @@
   --width-of-input: 240px;
   --height-of-input: 44px;
   --border-height: 2px;
-  --input-bg: var(--bg-secondary, #f5f5f7);
-  --border-color: var(--accent, #2563eb);
+  --input-bg: var(--color-paper-2, #efebe6);
+  --border-color: var(--color-accent, #504DE8);
   --border-radius: 22px;
   --after-border-radius: 8px;
-  --text-color: var(--text-primary, #1d1d1f);
-  --placeholder-color: var(--text-tertiary, #aeaeb2);
-  --icon-color: var(--text-tertiary, #aeaeb2);
+  --text-color: var(--color-ink, #2c2a28);
+  --placeholder-color: var(--color-ink-3, #99968f);
+  --icon-color: var(--color-ink-3, #99968f);
 
   position: relative;
   width: var(--width-of-input);

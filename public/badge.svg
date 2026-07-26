@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 56" fill="none">
+  <!-- 盾牌轮廓 -->
+  <path d="M24 2L4 12v16c0 12.8 8 24.8 20 28 12-3.2 20-15.2 20-28V12L24 2z"
+    fill="var(--color-paper, #faf8f5)"
+    stroke="var(--color-accent, #c04a2a)"
+    stroke-width="1.5"/>
+  <!-- 内部红旗 -->
+  <path d="M16 18h16v4l-4 2v4l-4 2-4-2v-4l-4-2v-4z"
+    fill="var(--color-accent, #c04a2a)"
+    opacity="0.85"/>
+  <!-- 旗帜杆 -->
+  <rect x="16" y="18" width="2" height="16" rx="0.5"
+    fill="var(--color-accent, #c04a2a)"/>
+  <!-- 底部文字装饰线 -->
+  <path d="M14 42h20M12 46h24"
+    stroke="var(--color-accent, #c04a2a)"
+    stroke-width="0.8"
+    opacity="0.5"/>
+</svg>

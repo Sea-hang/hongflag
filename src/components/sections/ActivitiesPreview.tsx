@@ -18,11 +18,10 @@ interface Activity {
   link?: string;
 }
 
-const child = {
+const fadeUp = {
   hidden: { opacity: 0, y: 20 },
   visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
+    opacity: 1, y: 0,
     transition: { delay: i * 0.08, duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
   }),
 };
@@ -36,15 +35,15 @@ export function ActivitiesPreview() {
   useEffect(() => {
     fetch("/api/activities")
       .then((r) => r.json() as Promise<Activity[]>)
-      .then((data) => setItems(data.slice(0, 5)));
+      .then((data) => setItems(data.slice(0, 5)))
+      .catch(() => {});
   }, []);
 
   const filtered = useMemo(() => {
     if (!search.trim()) return items;
     const keyword = search.toLowerCase();
     return items.filter(
-      (a) =>
-        a.title.toLowerCase().includes(keyword) ||
+      (a) => a.title.toLowerCase().includes(keyword) ||
         a.summary.toLowerCase().includes(keyword) ||
         a.tag?.toLowerCase().includes(keyword)
     );
@@ -56,68 +55,66 @@ export function ActivitiesPreview() {
   return (
     <section ref={ref} className="py-24 md:py-32">
       <div className="max-w-5xl mx-auto px-5">
-        {/* 标题栏 — Apple News 风格 */}
-        <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
+        {/* 标题 */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+          className="flex items-end justify-between mb-12 flex-wrap gap-4"
+        >
           <div>
-            <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-[var(--accent)] mb-2">
-              最新动态
-            </p>
-            <h2 className="text-[32px] md:text-[40px] font-extrabold tracking-[-0.02em] leading-[1.1] text-[var(--text-primary)]">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-px w-6" style={{ background: "var(--color-accent)" }} />
+              <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-accent)" }}>
+                最新动态
+              </span>
+            </div>
+            <h2
+              className="font-bold tracking-tight leading-[1.1]"
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: "var(--text-display-s)",
+                color: "var(--color-ink)",
+              }}
+            >
               活动栏
             </h2>
           </div>
           <div className="flex items-center gap-3">
-            <SearchInput placeholder="搜索..." onSearch={setSearch} />
-            <Link href="/activities" className="text-[14px] text-[var(--accent)] font-semibold hover:opacity-70 transition-opacity flex-shrink-0">
-              查看全部 →
+            <SearchInput placeholder="搜索活动..." onSearch={setSearch} />
+            <Link
+              href="/activities"
+              className="text-[14px] font-medium transition-all duration-300 hover:translate-x-0.5 hidden sm:inline-flex items-center gap-1"
+              style={{ color: "var(--color-accent)" }}
+            >
+              查看全部 <span>→</span>
             </Link>
           </div>
-        </div>
+        </motion.div>
 
         {filtered.length === 0 ? (
-          <p className="text-[var(--text-tertiary)] text-center py-20 text-[15px]">没有找到匹配的活动</p>
+          <p className="text-center py-20 text-[15px]" style={{ color: "var(--color-ink-3)" }}>
+            没有找到匹配的活动
+          </p>
         ) : (
           <div className="space-y-10">
-            {/* Hero 头条 */}
             {hero && (
-              <motion.div
-                custom={0} initial="hidden" animate={inView ? "visible" : "hidden"} variants={child}
-              >
-                <ActivityCard
-                  type={hero.type}
-                  title={hero.title}
-                  date={hero.date}
-                  tag={hero.tag}
-                  tagColor={hero.tagColor}
-                  summary={hero.summary}
-                  image={hero.image}
-                  link={hero.link}
-                  variant="hero"
+              <motion.div custom={0} initial="hidden" animate={inView ? "visible" : "hidden"} variants={fadeUp}>
+                <ActivityCard type={hero.type} title={hero.title} date={hero.date}
+                  tag={hero.tag} tagColor={hero.tagColor} summary={hero.summary}
+                  image={hero.image} link={hero.link} variant="hero"
                 />
               </motion.div>
             )}
-
-            {/* 次级卡片网格 */}
             {rest.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {rest.map((a, i) => (
-                  <motion.div
-                    key={a.id}
-                    custom={i + 1}
-                    initial="hidden"
-                    animate={inView ? "visible" : "hidden"}
-                    variants={child}
+                  <motion.div key={a.id} custom={i + 1} initial="hidden"
+                    animate={inView ? "visible" : "hidden"} variants={fadeUp}
                   >
-                    <ActivityCard
-                      type={a.type}
-                      title={a.title}
-                      date={a.date}
-                      tag={a.tag}
-                      tagColor={a.tagColor}
-                      summary={a.summary}
-                      image={a.image}
-                      link={a.link}
-                      variant="standard"
+                    <ActivityCard type={a.type} title={a.title} date={a.date}
+                      tag={a.tag} tagColor={a.tagColor} summary={a.summary}
+                      image={a.image} link={a.link} variant="standard"
                     />
                   </motion.div>
                 ))}
@@ -125,6 +122,19 @@ export function ActivitiesPreview() {
             )}
           </div>
         )}
+
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.5 }}
+          className="text-center mt-10 sm:hidden"
+        >
+          <Link href="/activities" className="inline-flex items-center gap-2 text-[14px] font-medium transition-all duration-300"
+            style={{ color: "var(--color-accent)" }}
+          >
+            查看全部活动 <span>→</span>
+          </Link>
+        </motion.div>
       </div>
     </section>
   );

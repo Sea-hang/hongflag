@@ -8,6 +8,14 @@ import { Footer } from "@/components/ui/Footer";
 import { NewtonCradle } from "@/components/ui/NewtonCradle";
 import { useAuth } from "@/lib/auth";
 
+// 微信图片走代理（绕过防盗链）
+function proxyImg(url: string): string {
+  if (/mmbiz\.qpic\.cn|mmbiz\.qlogo\.cn/.test(url) && !url.startsWith("/api/img")) {
+    return `/api/img?url=${encodeURIComponent(url)}`;
+  }
+  return url;
+}
+
 interface Activity {
   id: string;
   type: "notice" | "news";
@@ -175,6 +183,16 @@ export default function AdminPage() {
     fetchActivities(); setMsg({ type: "ok", text: "已删除" });
   };
 
+  // ===== 自动抓取：粘贴微信公众号链接后自动触发 =====
+  useEffect(() => {
+    if (!wechatUrl.trim() || !wechatUrl.includes('mp.weixin.qq.com') || fetching) return;
+    const timer = setTimeout(() => {
+      handleFetchWechat();
+    }, 600);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wechatUrl]);
+
   if (checking || !isTeacher) {
     return (
       <>
@@ -218,7 +236,7 @@ export default function AdminPage() {
                 value={wechatUrl}
                 onChange={(e) => setWechatUrl(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleFetchWechat()}
-                placeholder="https://mp.weixin.qq.com/s/..."
+                placeholder="https://mp.weixin.qq.com/s/... 粘贴后自动抓取"
                 className="flex-1 bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl px-4 py-3 text-[14px] outline-none focus:ring-2 focus:ring-green-500 transition-shadow"
               />
               <button
@@ -254,24 +272,56 @@ export default function AdminPage() {
 
                 <p className="text-[14px] text-[var(--text-secondary)] leading-relaxed line-clamp-3">{fetched.summary}</p>
 
-                {/* 图片选择 */}
+                {/* 图片选择 — 最多8张 */}
                 {fetched.images.length > 0 && (
                   <div>
-                    <p className="text-[12px] font-medium text-[var(--text-secondary)] mb-2">
-                      🖼️ 文章中的图片（{fetched.images.length} 张，点击选择作为封面）
-                    </p>
-                    <div className="flex gap-2 overflow-x-auto pb-2">
-                      {fetched.images.map((img, i) => (
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-[14px]">🖼️</span>
+                      <span className="text-[14px] font-semibold" style={{ color: "var(--color-ink)" }}>
+                        选择封面图片
+                      </span>
+                      <span className="text-[12px]" style={{ color: "var(--color-ink-3)" }}>
+                        （共 {fetched.images.length} 张，点击选中后导入表单）
+                      </span>
+                    </div>
+                    <div className="grid grid-cols-4 gap-2">
+                      {fetched.images.slice(0, 8).map((img, i) => (
                         <button
                           key={i}
                           onClick={() => setSelectedImage(img)}
-                          className={`flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all ${
+                          className={`relative aspect-[4/3] rounded-lg overflow-hidden border-2 transition-all ${
                             selectedImage === img
-                              ? "border-green-500 ring-2 ring-green-200"
-                              : "border-transparent hover:border-[var(--border)]"
+                              ? "border-blue-600 shadow-md shadow-blue-500/25 ring-2 ring-blue-400 dark:ring-blue-600"
+                              : "border-gray-200 dark:border-gray-700 hover:border-blue-400 hover:shadow-sm"
                           }`}
+                          style={{ background: "var(--color-paper-2, #f3f4f6)" }}
                         >
-                          <img src={img} alt={`图${i + 1}`} className="w-full h-full object-cover" />
+                          <img
+                            src={img}
+                            alt={`图${i + 1}`}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              const target = e.currentTarget;
+                              target.style.display = "none";
+                              const parent = target.parentElement;
+                              if (parent) {
+                                const fallback = document.createElement("div");
+                                fallback.className = "absolute inset-0 flex items-center justify-center text-2xl";
+                                fallback.textContent = "🖼️";
+                                parent.appendChild(fallback);
+                              }
+                            }}
+                          />
+                          {/* 选中状态 — 始终可见 */}
+                          <div className={`absolute inset-0 flex items-center justify-center transition-all ${
+                            selectedImage === img
+                              ? "opacity-100 bg-blue-600/30"
+                              : "opacity-0 pointer-events-none"
+                          }`}>
+                            <span className="bg-blue-600 text-white text-[13px] font-bold px-4 py-1.5 rounded-full shadow-lg shadow-blue-600/40 flex items-center gap-1.5 border border-blue-400/30">
+                              ✓ 已选封面
+                            </span>
+                          </div>
                         </button>
                       ))}
                     </div>
@@ -342,31 +392,38 @@ export default function AdminPage() {
               {/* ===== 图片 URL（不占存储）===== */}
               <div>
                 <p className="text-[13px] font-medium text-[var(--text-secondary)] mb-2">
-                  🖼️ 配图链接（可选，不占网站存储）
+                  🖼️ 封面图片链接（可选，只存链接不存图）
                 </p>
 
                 <div className="flex gap-2">
                   <input
                     value={activityImage}
                     onChange={(e) => handleImageUrlChange(e.target.value)}
-                    placeholder="粘贴图片链接，如 https://mmbiz.qpic.cn/..."
+                    placeholder="从上方选择微信图片后自动填入，或手动粘贴链接..."
                     className="flex-1 bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl px-4 py-3 text-[14px] outline-none focus:ring-2 focus:ring-[var(--accent)]"
                   />
-                  {activityImage && (
-                    <button type="button" onClick={() => setActivityImage("")}
-                      className="text-[var(--text-tertiary)] hover:text-red-500 px-2 transition-colors text-[20px]">✕</button>
-                  )}
+                  {activityImage ? (
+                    <>
+                      <button type="button" onClick={() => { navigator.clipboard.writeText(activityImage); setMsg({ type: "ok", text: "图片路径已复制！" }); }}
+                        className="bg-blue-500 text-white px-3 py-2 rounded-xl text-[13px] font-medium hover:bg-blue-600 transition-colors flex items-center gap-1.5 flex-shrink-0"
+                      >📋 复制
+                      </button>
+                      <button type="button" onClick={() => setActivityImage("")}
+                        className="bg-red-100 dark:bg-red-500/10 text-red-500 px-3 py-2 rounded-xl text-[13px] font-medium hover:bg-red-200 dark:hover:bg-red-500/20 transition-colors flex-shrink-0"
+                      >✕ 清除</button>
+                    </>
+                  ) : null}
                 </div>
 
                 {activityImage && (
                   <div className="mt-2 rounded-xl overflow-hidden bg-[var(--bg-primary)] border border-[var(--border)]">
-                    <img src={activityImage} alt="预览" className="w-full h-40 object-cover"
+                    <img src={proxyImg(activityImage)} alt="预览" className="w-full h-40 object-cover"
                       onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                   </div>
                 )}
 
                 <p className="text-[11px] text-[var(--text-tertiary)] mt-1.5">
-                  💡 只存链接不存图，不占空间。推荐用微信图片链接（从上方「同步微信文章」获取）
+                  💡 只存链接不存图，不占空间。从上方微信文章同步后自动填充图片
                 </p>
               </div>
 
@@ -391,22 +448,28 @@ export default function AdminPage() {
             <p className="text-[13px] text-[var(--text-tertiary)] mb-4">把图片放到 public/uploads/activities/ 文件夹，然后在下方填写路径。留空则使用默认样式。</p>
             {files.length > 0 && (
               <div className="mb-5 bg-[var(--bg-primary)] rounded-xl p-3 max-h-48 overflow-y-auto">
-                <p className="text-[12px] font-medium text-[var(--text-secondary)] mb-2">📁 本地文件</p>
+                <p className="text-[12px] font-medium text-[var(--text-secondary)] mb-2">📁 本地文件（点击选用，悬停复制路径）</p>
                 <div className="space-y-1">
                   {files.map((f) => (
-                    <button key={f.name} type="button"
-                      onClick={() => {
-                        if (activeField === "hero") setHeroBgImage(f.path);
-                        else if (activeField === "aboutPreview") setAboutPreviewImage(f.path);
-                        else if (activeField === "about") setAboutImage(f.path);
-                        else if (activeField === "contactMap") setContactMapImage(f.path);
-                      }}
-                      className="w-full flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors text-left group"
-                    >
-                      <span className="text-[16px]">{f.isImage ? "🖼️" : "📄"}</span>
-                      <span className="text-[13px] text-[var(--text-primary)] truncate flex-1">{f.name}</span>
-                      <span className="text-[11px] text-[var(--text-tertiary)] flex-shrink-0">{(f.size / 1024).toFixed(0)}KB</span>
-                    </button>
+                    <div key={f.name} className="group flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-[var(--bg-secondary)] transition-colors">
+                      <button type="button"
+                        onClick={() => {
+                          if (activeField === "hero") setHeroBgImage(f.path);
+                          else if (activeField === "aboutPreview") setAboutPreviewImage(f.path);
+                          else if (activeField === "about") setAboutImage(f.path);
+                          else if (activeField === "contactMap") setContactMapImage(f.path);
+                        }}
+                        className="flex items-center gap-2 flex-1 text-left min-w-0"
+                      >
+                        <span className="text-[16px]">{f.isImage ? "🖼️" : "📄"}</span>
+                        <span className="text-[13px] text-[var(--text-primary)] truncate flex-1">{f.name}</span>
+                        <span className="text-[11px] text-[var(--text-tertiary)] flex-shrink-0">{(f.size / 1024).toFixed(0)}KB</span>
+                      </button>
+                      <button type="button"
+                        onClick={() => { navigator.clipboard.writeText(f.path); setSettingsMsg({ type: "ok", text: `已复制: ${f.name}` }); }}
+                        className="text-[11px] px-2 py-0.5 rounded bg-[var(--accent)] text-white opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                      >复制路径</button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -426,9 +489,11 @@ export default function AdminPage() {
                     {value ? <img src={value} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
                       : <div className="w-10 h-10 rounded-lg bg-[var(--bg-primary)] flex items-center justify-center text-[18px] flex-shrink-0">🖼️</div>}
                     <button type="button" onClick={() => setActiveField(key)}
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors ${
-                        activeField === key ? "bg-[var(--accent)] text-white" : "bg-[var(--bg-primary)] hover:bg-[var(--bg-secondary)]"
-                      }`}>📌</button>
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors border ${
+                        activeField === key
+                          ? "bg-[var(--accent)] text-white border-[var(--accent)]"
+                          : "bg-[var(--bg-primary)] text-[var(--text-secondary)] border-[var(--border)] hover:bg-[var(--accent-light)] hover:text-[var(--accent)]"
+                      }`} title={`点击「${key}」后，再点击文件列表中的文件 → 自动填入`}>📌</button>
                   </div>
                 </div>
               ))}
@@ -452,7 +517,8 @@ export default function AdminPage() {
               {activities.map((a) => (
                 <div key={a.id} className="flex items-start gap-3 bg-[var(--bg-secondary)] rounded-xl px-4 py-3 group">
                   {a.image && (
-                    <img src={a.image} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0 mt-0.5" />
+                    <img src={proxyImg(a.image)} alt="" className="w-12 h-12 rounded-lg object-cover flex-shrink-0 mt-0.5"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }} />
                   )}
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">

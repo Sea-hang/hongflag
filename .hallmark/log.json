@@ -1,0 +1,26 @@
+[
+  {
+    "date": "2026-07-26",
+    "macrostructure": "Marquee Hero / Long Document / Catalogue / Letter / StackedBooks",
+    "theme": "custom",
+    "theme_axes": "light-paper / serif / indigo-violet",
+    "vibe": "Braindrop 灵感 · 暖奶油色 · 深海军蓝 · 靛紫",
+    "enrichment": "StackedBooks 3D 堆叠书本",
+    "brief": "红旗实验学校 · Braindrop 灵感全站 redesign",
+    "scope": "app",
+    "display_font": "Noto Serif SC",
+    "body_font": "Noto Sans SC + Figtree + Inter",
+    "accent": "oklch(52% 0.18 280)",
+    "paper": "oklch(97% 0.012 80)"
+  },
+  {
+    "date": "2026-07-26",
+    "macrostructure": "Marquee Hero / Long Document / Catalogue / Letter",
+    "theme": "custom",
+    "theme_axes": "mid-paper / roman-serif / warm-red",
+    "vibe": "学术书卷 · 朱砂红 · 暖纸",
+    "enrichment": "none (typography only)",
+    "brief": "红旗实验学校 · 学术化 redesign (初始版本)",
+    "scope": "app"
+  }
+]

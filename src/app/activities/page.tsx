@@ -24,13 +24,14 @@ const fadeUp = {
   visible: (i = 0) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.06, duration: 0.5, ease: [0.16, 1, 0.3, 1] as const },
+    transition: { delay: i * 0.06, duration: 0.6, ease: [0.16, 1, 0.3, 1] as const },
   }),
 };
 
 export default function ActivitiesPage() {
   const [activities, setActivities] = useState<Activity[]>([]);
   const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState<"all" | "notice" | "news">("all");
 
   useEffect(() => {
     fetch("/api/activities")
@@ -39,126 +40,135 @@ export default function ActivitiesPage() {
   }, []);
 
   const filtered = useMemo(() => {
-    if (!search.trim()) return activities;
-    const keyword = search.toLowerCase();
-    return activities.filter(
-      (a) =>
-        a.title.toLowerCase().includes(keyword) ||
-        a.summary.toLowerCase().includes(keyword) ||
-        a.tag?.toLowerCase().includes(keyword)
-    );
-  }, [activities, search]);
+    let items = activities;
+    if (activeTab !== "all") {
+      items = items.filter((a) => a.type === activeTab);
+    }
+    if (search.trim()) {
+      const keyword = search.toLowerCase();
+      items = items.filter(
+        (a) =>
+          a.title.toLowerCase().includes(keyword) ||
+          a.summary.toLowerCase().includes(keyword) ||
+          a.tag?.toLowerCase().includes(keyword)
+      );
+    }
+    return items;
+  }, [activities, search, activeTab]);
 
-  // Apple News 式分组
   const topStory = filtered[0];
-  const secondaryLead = filtered[1];
-  const gridStories = filtered.slice(2, 6);
-  const compactStories = filtered.slice(6);
+  const gridStories = filtered.slice(1);
 
-  const notices = filtered.filter((a) => a.type === "notice");
-  const news = filtered.filter((a) => a.type === "news");
+  const notices = activities.filter((a) => a.type === "notice");
+  const news = activities.filter((a) => a.type === "news");
 
   return (
     <>
       <GlassNav />
-      <main className="pt-20 pb-16">
-        {/* 顶部标题栏 */}
-        <section className="max-w-5xl mx-auto px-5 pt-8 pb-6">
-          <div className="flex items-end justify-between flex-wrap gap-4">
-            <div>
-              <p className="text-[11px] font-bold tracking-[0.12em] uppercase text-[var(--accent)] mb-1">
+      <main className="pt-28 pb-16">
+        {/* 顶部标题区 */}
+        <section className="max-w-5xl mx-auto px-5 pt-8 pb-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <div className="flex items-center gap-3 mb-3">
+              <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-accent)" }} />
+              <span className="text-[12px] font-medium tracking-[0.12em] uppercase text-[var(--color-accent)]">
                 活动栏
-              </p>
-              <h1 className="text-[36px] md:text-[48px] font-extrabold tracking-[-0.02em] leading-[1.05] text-[var(--text-primary)]">
-                新闻动态
-              </h1>
+              </span>
             </div>
-            <SearchInput placeholder="搜索活动..." onSearch={setSearch} />
-          </div>
+            <h1
+              className="text-[var(--text-display-s)] font-bold tracking-tight leading-[1.1] mb-2"
+              style={{ fontFamily: "var(--font-display)", color: "var(--color-ink)" }}
+            >
+              新闻动态
+            </h1>
+          </motion.div>
         </section>
 
+        {/* 搜索 + 分类标签 */}
+        <section className="max-w-5xl mx-auto px-5 pb-6">
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.5 }}
+            className="flex items-center justify-between flex-wrap gap-4"
+          >
+            {/* 分类标签 */}
+            <div className="flex items-center gap-1">
+              {[
+                { key: "all", label: "全部" },
+                { key: "notice", label: `通知 (${notices.length})` },
+                { key: "news", label: `新闻 (${news.length})` },
+              ].map((tab) => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key as "all" | "notice" | "news")}
+                  className="relative text-[13px] px-4 py-1.5 rounded-full transition-all duration-200"
+                  style={{
+                    color: activeTab === tab.key ? "var(--color-accent)" : "var(--color-ink-2)",
+                    background: activeTab === tab.key ? "var(--color-accent-light)" : "transparent",
+                    fontWeight: activeTab === tab.key ? 600 : 400,
+                  }}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+            <SearchInput placeholder="搜索活动..." onSearch={setSearch} />
+          </motion.div>
+        </section>
+
+        {/* 内容区 */}
         <div className="max-w-5xl mx-auto px-5 pb-20">
           {filtered.length === 0 ? (
-            <p className="text-[var(--text-tertiary)] text-center py-20 text-[15px]">没有找到匹配的活动</p>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-center py-20 text-[15px]"
+              style={{ color: "var(--color-ink-3)" }}
+            >
+              没有找到匹配的活动
+            </motion.p>
           ) : (
             <div className="space-y-12">
               {/* ===== 头条区 ===== */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                {/* 主头条 — 占 2/3 */}
+              <motion.div
+                initial="hidden"
+                animate="visible"
+                variants={fadeUp}
+              >
                 {topStory && (
-                  <motion.div
-                    custom={0} initial="hidden" animate="visible" variants={fadeUp}
-                    className="lg:col-span-2"
-                  >
-                    <ActivityCard
-                      type={topStory.type}
-                      title={topStory.title}
-                      date={topStory.date}
-                      tag={topStory.tag}
-                      tagColor={topStory.tagColor}
-                      summary={topStory.summary}
-                      image={topStory.image}
-                      variant="hero"
-                    />
-                  </motion.div>
+                  <ActivityCard
+                    type={topStory.type}
+                    title={topStory.title}
+                    date={topStory.date}
+                    tag={topStory.tag}
+                    tagColor={topStory.tagColor}
+                    summary={topStory.summary}
+                    image={topStory.image}
+                    variant="hero"
+                  />
                 )}
-
-                {/* 右侧次要头条列表 */}
-                <div className="flex flex-col gap-4">
-                  {secondaryLead && (
-                    <motion.div custom={1} initial="hidden" animate="visible" variants={fadeUp}>
-                      <ActivityCard
-                        type={secondaryLead.type}
-                        title={secondaryLead.title}
-                        date={secondaryLead.date}
-                        tag={secondaryLead.tag}
-                        tagColor={secondaryLead.tagColor}
-                        summary={secondaryLead.summary}
-                        image={secondaryLead.image}
-                        variant="standard"
-                      />
-                    </motion.div>
-                  )}
-                  {/* 紧凑列表 */}
-                  {compactStories.slice(0, 3).map((a, i) => (
-                    <motion.div
-                      key={a.id}
-                      custom={i + 2}
-                      initial="hidden"
-                      animate="visible"
-                      variants={fadeUp}
-                    >
-                      <ActivityCard
-                        type={a.type}
-                        title={a.title}
-                        date={a.date}
-                        tag={a.tag}
-                        tagColor={a.tagColor}
-                        summary={a.summary}
-                        image={a.image}
-                        link={a.link}
-                        variant="compact"
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+              </motion.div>
 
               {/* ===== 网格区 ===== */}
               {gridStories.length > 0 && (
                 <>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-[2px] flex-1 bg-[var(--border)]" />
-                    <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-[var(--text-tertiary)] flex-shrink-0">
+                  <div className="flex items-center gap-3">
+                    <div className="h-px flex-1" style={{ background: "var(--color-rule)" }} />
+                    <span className="text-[11px] font-bold tracking-[0.1em] uppercase flex-shrink-0" style={{ color: "var(--color-ink-3)" }}>
                       更多动态
                     </span>
-                    <div className="h-[2px] flex-1 bg-[var(--border)]" />
+                    <div className="h-px flex-1" style={{ background: "var(--color-rule)" }} />
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {gridStories.map((a, i) => (
                       <motion.div
                         key={a.id}
-                        custom={i + 6}
+                        custom={i}
                         initial="hidden"
                         animate="visible"
                         variants={fadeUp}
@@ -181,16 +191,21 @@ export default function ActivitiesPage() {
               )}
 
               {/* ===== 通知公告区 ===== */}
-              {notices.length > 0 && (
+              {notices.length > 0 && activeTab === "all" && (
                 <>
                   <div className="flex items-center gap-3">
-                    <div className="h-[2px] flex-1 bg-[var(--border)]" />
-                    <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-[var(--accent)] flex-shrink-0">
+                    <div className="h-px flex-1" style={{ background: "var(--color-rule)" }} />
+                    <span className="text-[11px] font-bold tracking-[0.1em] uppercase flex-shrink-0" style={{ color: "var(--color-accent)" }}>
                       通知公告
                     </span>
-                    <div className="h-[2px] flex-1 bg-[var(--border)]" />
+                    <div className="h-px flex-1" style={{ background: "var(--color-rule)" }} />
                   </div>
-                  <div className="bg-[var(--bg-secondary)] rounded-2xl p-5 divide-y divide-[var(--border)]">
+                  <div className="rounded-2xl p-6 divide-y"
+                    style={{
+                      background: "var(--color-paper-2)",
+                      border: "1px solid var(--color-rule)",
+                    }}
+                  >
                     {notices.map((a, i) => (
                       <motion.div
                         key={a.id}
@@ -207,7 +222,7 @@ export default function ActivitiesPage() {
                           tagColor={a.tagColor}
                           summary={a.summary}
                           image={a.image}
-                        link={a.link}
+                          link={a.link}
                           variant="compact"
                         />
                       </motion.div>
@@ -217,14 +232,14 @@ export default function ActivitiesPage() {
               )}
 
               {/* ===== 全部新闻网格 ===== */}
-              {news.length > 1 && (
+              {news.length > 1 && activeTab === "all" && (
                 <>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="h-[2px] flex-1 bg-[var(--border)]" />
-                    <span className="text-[11px] font-bold tracking-[0.1em] uppercase text-[var(--text-tertiary)] flex-shrink-0">
+                  <div className="flex items-center gap-3">
+                    <div className="h-px flex-1" style={{ background: "var(--color-rule)" }} />
+                    <span className="text-[11px] font-bold tracking-[0.1em] uppercase flex-shrink-0" style={{ color: "var(--color-ink-3)" }}>
                       全部新闻
                     </span>
-                    <div className="h-[2px] flex-1 bg-[var(--border)]" />
+                    <div className="h-px flex-1" style={{ background: "var(--color-rule)" }} />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
                     {news.map((a, i) => (

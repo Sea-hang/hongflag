@@ -5,6 +5,11 @@ import { motion, useInView } from "framer-motion";
 import Link from "next/link";
 import { aboutPreviewData } from "@/data/home";
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 30 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.7, ease: [0.16, 1, 0.3, 1] as const } },
+};
+
 export function AboutPreview() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-100px" });
@@ -21,36 +26,72 @@ export function AboutPreview() {
 
   return (
     <section ref={ref} className="max-w-5xl mx-auto px-5 py-24 md:py-32">
+      {/* 标签 */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as const }}
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="flex items-center gap-3 mb-4"
       >
-        <p className="text-[13px] font-medium text-[var(--accent)] tracking-wide mb-3">
+        <div className="h-px w-6" style={{ background: "var(--color-accent)" }} />
+        <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-accent)" }}>
           {aboutPreviewData.label}
-        </p>
-        <h2 className="text-[32px] md:text-[40px] font-bold tracking-tight text-[var(--text-primary)] mb-8">
+        </span>
+      </motion.div>
+
+      <motion.div
+        initial="hidden"
+        animate={inView ? "visible" : "hidden"}
+        variants={fadeUp}
+      >
+        <h2
+          className="font-bold tracking-tight mb-10 leading-[1.1]"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "var(--text-display-s)",
+            color: "var(--color-ink)",
+          }}
+        >
           {aboutPreviewData.title}
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
-          <div className="space-y-4 text-[16px] text-[var(--text-secondary)] leading-relaxed">
-            <p className="text-[var(--text-primary)] text-[19px] font-semibold leading-snug">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+          <div className="space-y-5 text-[16px] leading-relaxed" style={{ color: "var(--color-ink-2)" }}>
+            <p
+              className="text-[18px] font-semibold leading-snug"
+              style={{ color: "var(--color-ink)" }}
+            >
               {aboutPreviewData.highlight}
             </p>
             <p>{aboutPreviewData.description}</p>
             <Link
               href="/about"
-              className="inline-block text-[var(--accent)] font-medium text-[15px] hover:opacity-70 transition-opacity mt-2"
+              className="inline-flex items-center gap-2 text-[15px] font-medium transition-all duration-300 group"
+              style={{ color: "var(--color-accent)" }}
             >
               {aboutPreviewData.linkText}
+              <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
             </Link>
           </div>
-          <div className="rounded-3xl aspect-square overflow-hidden hover:scale-[1.02] transition-transform duration-500 shadow-lg">
-            {image ? (
-              <img src={image} alt="学校照片" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-blue-400 to-blue-600 flex items-center justify-center text-white text-7xl">🏫</div>
-            )}
+
+          <div className="relative">
+            <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-500 aspect-[4/3] border"
+              style={{ borderColor: "var(--color-accent-light)" }}
+            >
+              {image ? (
+                <img
+                  src={image}
+                  alt="学校照片"
+                  className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-6xl"
+                  style={{ background: "var(--color-paper-2)" }}
+                >
+                  🏫
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </motion.div>
