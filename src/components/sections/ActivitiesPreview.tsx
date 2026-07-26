@@ -64,8 +64,8 @@ export function ActivitiesPreview() {
         >
           <div>
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-px w-6" style={{ background: "var(--color-accent)" }} />
-              <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-accent)" }}>
+              <div className="h-px w-6" style={{ background: "var(--color-warm)" }} />
+              <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
                 最新动态
               </span>
             </div>
@@ -80,8 +80,10 @@ export function ActivitiesPreview() {
               活动栏
             </h2>
           </div>
-          <div className="flex items-center gap-3">
-            <SearchInput placeholder="搜索活动..." onSearch={setSearch} />
+          <div className="flex items-center gap-3 max-md:w-full">
+            <div className="max-md:flex-1">
+              <SearchInput placeholder="搜索活动..." onSearch={setSearch} />
+            </div>
             <Link
               href="/activities"
               className="text-[14px] font-medium transition-all duration-300 hover:translate-x-0.5 hidden sm:inline-flex items-center gap-1"
@@ -107,7 +109,7 @@ export function ActivitiesPreview() {
               </motion.div>
             )}
             {rest.length > 0 && (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
                 {rest.map((a, i) => (
                   <motion.div key={a.id} custom={i + 1} initial="hidden"
                     animate={inView ? "visible" : "hidden"} variants={fadeUp}
@@ -127,10 +129,14 @@ export function ActivitiesPreview() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: 0.5 }}
-          className="text-center mt-10 sm:hidden"
+          className="text-center mt-8 sm:hidden"
         >
-          <Link href="/activities" className="inline-flex items-center gap-2 text-[14px] font-medium transition-all duration-300"
-            style={{ color: "var(--color-accent)" }}
+          <Link href="/activities"
+            className="inline-flex items-center justify-center gap-2 w-full py-3.5 px-6 text-[15px] font-semibold rounded-xl transition-all duration-200 active:scale-[0.98]"
+            style={{
+              color: "var(--color-accent)",
+              background: "var(--color-accent-light)",
+            }}
           >
             查看全部活动 <span>→</span>
           </Link>

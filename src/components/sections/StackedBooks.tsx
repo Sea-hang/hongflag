@@ -36,11 +36,11 @@ export function StackedBooks() {
       <div className="max-w-5xl mx-auto px-5">
         {/* 简洁的顶部标签 */}
         <div className="flex items-center gap-3 mb-3 justify-center">
-          <div className="h-px w-8" style={{ background: "var(--color-accent)" }} />
-          <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-accent)" }}>
+          <div className="h-px w-8" style={{ background: "var(--color-warm)" }} />
+          <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
             最新动态
           </span>
-          <div className="h-px w-8" style={{ background: "var(--color-accent)" }} />
+          <div className="h-px w-8" style={{ background: "var(--color-warm)" }} />
         </div>
 
         <h2
@@ -50,8 +50,8 @@ export function StackedBooks() {
           校园书讯
         </h2>
 
-        {/* 堆叠书本 */}
-        <div className="relative flex justify-center" style={{ perspective: "800px" }}>
+        {/* 桌面端 3D 堆叠书本 */}
+        <div className="hidden md:relative md:flex md:justify-center" style={{ perspective: "800px" }}>
           {books.map((book, i) => {
             const isTop = i === 0;
             const isHovered = hovered === i;
@@ -165,8 +165,56 @@ export function StackedBooks() {
           })}
         </div>
 
-        {/* 占位高度 */}
-        <div style={{ height: `${8 * (books.length - 1) + 100}px` }} />
+        {/* 占位高度（仅桌面端 3D 效果需要） */}
+        <div className="hidden md:block" style={{ height: `${8 * (books.length - 1) + 100}px` }} />
+
+        {/* 手机端平面列表 */}
+        <div className="md:hidden space-y-3">
+          {books.map((book, i) => (
+            <motion.a
+              key={book.id}
+              href={book.link || "#"}
+              target={book.link ? "_blank" : undefined}
+              rel={book.link ? "noopener noreferrer" : undefined}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.1, duration: 0.4, ease: [0.16, 1, 0.3, 1] as const }}
+              className="block rounded-xl overflow-hidden active:scale-[0.98] transition-transform duration-200 border"
+              style={{ borderColor: bookColors[i].cover }}
+            >
+              <div className="flex items-stretch" style={{ background: "var(--color-card)" }}>
+                {/* 左侧色条 */}
+                <div className="w-1.5 flex-shrink-0" style={{ background: bookColors[i].spine }} />
+                {/* 内容 */}
+                <div className="flex-1 flex items-center py-4 pl-4 pr-3">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-0.5">
+                      <span className="text-[11px] font-bold tracking-[0.06em] uppercase"
+                        style={{ color: bookColors[i].cover === "var(--color-accent)" ? "var(--color-accent)" : bookColors[i].cover }}
+                      >
+                        {book.type === "notice" ? "📢 通知" : "📰 新闻"}
+                      </span>
+                      <span className="text-[11px]" style={{ color: "var(--color-ink-3)" }}>
+                        {book.date}
+                      </span>
+                    </div>
+                    <h3 className="text-[15px] font-bold leading-snug line-clamp-1 tracking-[-0.01em]"
+                      style={{ color: "var(--color-ink)", fontFamily: "var(--font-display)" }}
+                    >
+                      {book.title}
+                    </h3>
+                    {book.summary && (
+                      <p className="text-[12px] mt-0.5 line-clamp-1" style={{ color: "var(--color-ink-2)" }}>
+                        {book.summary}
+                      </p>
+                    )}
+                  </div>
+                  <span className="ml-2 flex-shrink-0 text-[14px]" style={{ color: "var(--color-ink-3)" }}>→</span>
+                </div>
+              </div>
+            </motion.a>
+          ))}
+        </div>
       </div>
     </section>
   );

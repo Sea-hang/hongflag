@@ -112,3 +112,10 @@
   opacity: 1;
   visibility: visible;
 }
+
+/* 手机端全宽 */
+@media (max-width: 767px) {
+  .form {
+    width: 100%;
+  }
+}

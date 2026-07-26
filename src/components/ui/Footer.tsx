@@ -11,7 +11,7 @@ export function Footer() {
   return (
     <footer className="relative mt-32">
       {/* SVG 曲线分隔线 — Braindrop 灵感 */}
-      <div className="relative h-16 md:h-24 overflow-hidden" style={{ background: "var(--color-paper)" }}>
+      <div className="relative max-md:h-12 h-16 md:h-24 overflow-hidden" style={{ background: "var(--color-paper)" }}>
         <svg
           viewBox="0 0 1440 100"
           preserveAspectRatio="none"
@@ -41,7 +41,7 @@ export function Footer() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="text-center mb-14"
           >
-            <p className="text-xl md:text-2xl font-bold tracking-wide text-white" style={{ fontFamily: "var(--font-display)" }}>
+            <p className="max-md:text-lg text-xl md:text-2xl font-bold tracking-wide text-white" style={{ fontFamily: "var(--font-display)" }}>
               "厚德博学 · 求实创新"
             </p>
             <p className="text-[13px] mt-2 tracking-widest text-white/50">
@@ -50,7 +50,7 @@ export function Footer() {
           </motion.div>
 
           {/* 三栏 */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-10 text-[14px] text-white/80">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 text-[14px] text-white/80">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -143,6 +143,9 @@ export function Footer() {
           <div className="border-t border-white/10 mt-12 pt-6 text-[12px] text-white/40 text-center">
             {site.copyright}
           </div>
+          <p className="mt-3 text-[11px] text-white/30 text-center leading-relaxed">
+            😁感谢学校提供的素材和支持，感谢 Sea_hang 的技术支持，特别鸣谢：闫同学
+          </p>
         </div>
       </div>
     </footer>

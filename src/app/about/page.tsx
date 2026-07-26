@@ -39,8 +39,8 @@ export default function AboutPage() {
             custom={0} initial="hidden" animate="visible" variants={fadeUp}
             className="flex items-center gap-3 mb-4"
           >
-            <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-accent)" }} />
-            <span className="text-[12px] font-medium tracking-[0.12em] uppercase text-[var(--color-accent)]">
+            <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-warm)" }} />
+            <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
               {aboutData.label}
             </span>
           </motion.div>
@@ -123,11 +123,11 @@ export default function AboutPage() {
               className="text-center mb-14"
             >
               <div className="flex items-center justify-center gap-4 mb-4">
-                <div className="h-px w-12" style={{ background: "var(--color-rule)" }} />
-                <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-accent)" }}>
+                <div className="h-px w-12" style={{ background: "var(--color-warm)" }} />
+                <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
                   办学理念
                 </span>
-                <div className="h-px w-12" style={{ background: "var(--color-rule)" }} />
+                <div className="h-px w-12" style={{ background: "var(--color-warm)" }} />
               </div>
               <h2
                 className="text-[var(--text-2xl)] font-bold tracking-tight"
@@ -137,7 +137,7 @@ export default function AboutPage() {
               </h2>
             </motion.div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5">
               {aboutData.philosophyCards.map((item, i) => (
                 <motion.div
                   key={item.label}

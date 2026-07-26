@@ -41,7 +41,7 @@ export function ActivityCard({
       <motion.a
         href={href} {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
         whileHover={{ scale: 1.01 }}
-        className="relative block w-full rounded-2xl overflow-hidden group cursor-pointer"
+        className="relative block w-full max-md:rounded-xl rounded-2xl overflow-hidden group cursor-pointer active:scale-[0.98] transition-transform duration-200"
         style={{ minHeight: "380px" }}
       >
         {image ? (
@@ -67,7 +67,7 @@ export function ActivityCard({
               {tag}
             </span>
           )}
-          <h3 className="text-[24px] md:text-[32px] font-bold leading-[1.15] text-white mb-2 tracking-[-0.01em]"
+          <h3 className="text-[22px] md:text-[32px] font-bold leading-[1.15] text-white mb-2 tracking-[-0.01em]"
             style={{ fontFamily: "var(--font-display)" }}
           >
             {title}
@@ -132,14 +132,14 @@ export function ActivityCard({
     <motion.a
       href={href} {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
       whileHover={{ y: -3 }}
-      className="block rounded-2xl overflow-hidden group transition-all duration-300 border"
+      className="block max-md:rounded-xl rounded-2xl overflow-hidden group transition-all duration-300 border active:scale-[0.98]"
       style={{
         background: "var(--color-paper)",
         borderColor: "var(--color-rule)",
       }}
     >
       {/* 图片区 */}
-      <div className="aspect-[16/10] overflow-hidden relative"
+      <div className="max-md:aspect-[4/3] aspect-[16/10] overflow-hidden relative"
         style={{ background: "var(--color-paper-2)" }}
       >
         {image ? (

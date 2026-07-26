@@ -6,11 +6,12 @@ import { motion } from "framer-motion";
 import { GlassNav } from "@/components/ui/GlassNav";
 import { Footer } from "@/components/ui/Footer";
 import { NewtonCradle } from "@/components/ui/NewtonCradle";
+import { PlusButton } from "@/components/ui/PlusButton";
 import { useAuth } from "@/lib/auth";
 
 // 微信图片走代理（绕过防盗链）
 function proxyImg(url: string): string {
-  if (/mmbiz\.qpic\.cn|mmbiz\.qlogo\.cn/.test(url) && !url.startsWith("/api/img")) {
+  if (/(?:mmbiz|mmecoa)\.qpic\.cn/.test(url) && !url.startsWith("/api/img")) {
     return `/api/img?url=${encodeURIComponent(url)}`;
   }
   return url;
@@ -342,7 +343,6 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
             className="bg-[var(--bg-secondary)] rounded-3xl p-6 mb-10"
           >
-            <h2 className="text-[18px] font-semibold text-[var(--text-primary)] mb-5">➕ 添加新活动</h2>
             <form onSubmit={handleAdd} className="space-y-4">
               {/* 类型切换 */}
               <div className="flex gap-3">
@@ -430,7 +430,7 @@ export default function AdminPage() {
               {/* 提交 */}
               <button type="submit"
                 className="w-full bg-[var(--accent)] text-white text-[15px] font-medium py-3.5 rounded-full hover:bg-[var(--accent-hover)] transition-colors shadow-sm"
-              >添加活动</button>
+              >提交</button>
             </form>
 
             {msg && (
@@ -438,6 +438,14 @@ export default function AdminPage() {
                 msg.type === "ok" ? "bg-green-50 text-green-700 dark:bg-green-500/10 dark:text-green-400" : "bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400"
               }`}>{msg.text}</div>
             )}
+          </motion.div>
+
+          {/* ===== PlusButton 新功能入口 ===== */}
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
+            className="flex flex-col items-center py-6 mb-6"
+          >
+            <span className="text-[12px] font-medium tracking-wider mb-3" style={{ color: "var(--color-ink-3)" }}>添加</span>
+            <PlusButton />
           </motion.div>
 
           {/* ===== 图片设置 ===== */}
@@ -489,11 +497,21 @@ export default function AdminPage() {
                     {value ? <img src={value} alt="" className="w-10 h-10 rounded-lg object-cover flex-shrink-0" />
                       : <div className="w-10 h-10 rounded-lg bg-[var(--bg-primary)] flex items-center justify-center text-[18px] flex-shrink-0">🖼️</div>}
                     <button type="button" onClick={() => setActiveField(key)}
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors border ${
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-all border text-[16px] ${
                         activeField === key
-                          ? "bg-[var(--accent)] text-white border-[var(--accent)]"
-                          : "bg-[var(--bg-primary)] text-[var(--text-secondary)] border-[var(--border)] hover:bg-[var(--accent-light)] hover:text-[var(--accent)]"
-                      }`} title={`点击「${key}」后，再点击文件列表中的文件 → 自动填入`}>📌</button>
+                          ? "bg-green-500 text-white border-green-500 shadow-sm shadow-green-500/30"
+                          : "bg-[var(--bg-primary)] text-[var(--text-tertiary)] border-[var(--border)] hover:bg-[var(--accent-light)] hover:text-[var(--accent)]"
+                      }`} title={`点击「${key}」后，再点击文件列表中的文件 → 自动填入`}>
+                      {activeField === key ? (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                          <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                        </svg>
+                      ) : (
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-5 h-5 opacity-50">
+                          <rect x="3" y="3" width="18" height="18" rx="3" />
+                        </svg>
+                      )}
+                    </button>
                   </div>
                 </div>
               ))}

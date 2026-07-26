@@ -44,11 +44,11 @@ export function Hero() {
       ) : (
         <div className="absolute inset-0 -z-10">
           <div
-            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] opacity-20"
+            className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full max-md:blur-[60px] blur-[120px] opacity-20"
             style={{ background: "var(--color-accent)" }}
           />
           <div
-            className="absolute top-1/2 right-1/4 w-[350px] h-[350px] rounded-full blur-[90px] opacity-12"
+            className="absolute top-1/2 right-1/4 w-[350px] h-[350px] rounded-full max-md:blur-[45px] blur-[90px] opacity-12"
             style={{ background: "var(--color-accent-light)" }}
           />
         </div>
@@ -72,7 +72,7 @@ export function Hero() {
         <motion.p
           custom={0} initial="hidden" animate="visible" variants={fadeUp}
           className="text-[13px] font-medium tracking-[0.15em] uppercase mb-6"
-          style={{ color: "var(--color-accent)" }}
+          style={{ color: "var(--color-warm)" }}
         >
           {heroData.tagline}
         </motion.p>
@@ -80,7 +80,7 @@ export function Hero() {
         {/* 巨大标题 — 衬线字体，极小行高，如 Braindrop */}
         <motion.h1
           custom={1} initial="hidden" animate="visible" variants={fadeUp}
-          className="font-bold leading-[0.95] tracking-[-0.005em]"
+          className="font-bold leading-[0.95] tracking-[-0.005em] max-md:text-[max(2.5rem,11vw)]"
           style={{
             fontFamily: "var(--font-display)",
             fontSize: "var(--text-display)",
@@ -101,7 +101,7 @@ export function Hero() {
         {/* 副标题 */}
         <motion.p
           custom={2} initial="hidden" animate="visible" variants={fadeUp}
-          className="text-[17px] md:text-[22px] leading-relaxed max-w-lg mx-auto mt-8 mb-10"
+          className="text-[17px] md:text-[22px] leading-relaxed max-md:max-w-none max-w-lg mx-auto mt-8 mb-10"
           style={{ color: "var(--color-ink-2)" }}
         >
           {heroData.subtitle}
@@ -117,12 +117,12 @@ export function Hero() {
         </motion.div>
       </motion.div>
 
-      {/* 滚动提示 */}
+      {/* 滚动提示 — 手机端隐藏 */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.5, duration: 1 }}
-        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        className="max-md:hidden absolute bottom-10 left-1/2 -translate-x-1/2"
       >
         <motion.div
           animate={{ y: [0, 6, 0] }}

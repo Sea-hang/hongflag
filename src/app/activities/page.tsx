@@ -74,8 +74,8 @@ export default function ActivitiesPage() {
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-accent)" }} />
-              <span className="text-[12px] font-medium tracking-[0.12em] uppercase text-[var(--color-accent)]">
+              <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-warm)" }} />
+              <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
                 活动栏
               </span>
             </div>
@@ -94,7 +94,7 @@ export default function ActivitiesPage() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.5 }}
-            className="flex items-center justify-between flex-wrap gap-4"
+            className="flex items-center justify-between max-md:flex-col max-md:items-start flex-wrap gap-4"
           >
             {/* 分类标签 */}
             <div className="flex items-center gap-1">
@@ -106,7 +106,7 @@ export default function ActivitiesPage() {
                 <button
                   key={tab.key}
                   onClick={() => setActiveTab(tab.key as "all" | "notice" | "news")}
-                  className="relative text-[13px] px-4 py-1.5 rounded-full transition-all duration-200"
+                  className="relative text-[13px] max-md:text-[15px] max-md:px-5 max-md:py-2.5 px-4 py-1.5 rounded-full transition-all duration-200"
                   style={{
                     color: activeTab === tab.key ? "var(--color-accent)" : "var(--color-ink-2)",
                     background: activeTab === tab.key ? "var(--color-accent-light)" : "transparent",
@@ -117,7 +117,7 @@ export default function ActivitiesPage() {
                 </button>
               ))}
             </div>
-            <SearchInput placeholder="搜索活动..." onSearch={setSearch} />
+            <div className="max-md:w-full"><SearchInput placeholder="搜索活动..." onSearch={setSearch} /></div>
           </motion.div>
         </section>
 
@@ -200,7 +200,7 @@ export default function ActivitiesPage() {
                     </span>
                     <div className="h-px flex-1" style={{ background: "var(--color-rule)" }} />
                   </div>
-                  <div className="rounded-2xl p-6 divide-y"
+                  <div className="rounded-2xl max-md:p-4 p-6 divide-y"
                     style={{
                       background: "var(--color-paper-2)",
                       border: "1px solid var(--color-rule)",

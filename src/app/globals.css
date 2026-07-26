@@ -1,27 +1,36 @@
 @import "tailwindcss";
 
 /* ============================================================
-   红旗实验学校 · Braindrop 灵感设计
-   暖奶油色 + 深海军蓝 + 靛紫点缀
-   Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5
+   红旗实验学校 · 蓝+浅红+米白 配色方案
+   蓝色主色 + 浅红点缀 + 米白背景
+   Hallmark · pre-emit critique: P5 H4 E5 S4 R5 V4
    设计系统: design.md (project root)
    ============================================================ */
 
 :root {
-  /* Braindrop 灵感色板 */
-  --color-paper:         oklch(97% 0.012 80);
-  --color-paper-2:       oklch(94% 0.008 80);
-  --color-paper-3:       oklch(89% 0.006 80);
-  --color-ink:           oklch(15% 0.02 270);
-  --color-ink-2:         oklch(38% 0.025 270);
-  --color-ink-3:         oklch(52% 0.02 270);
-  --color-rule:          oklch(86% 0.01 80);
-  --color-accent:        oklch(52% 0.18 280);
-  --color-accent-2:      oklch(44% 0.18 280);
-  --color-accent-light:  oklch(72% 0.10 280);
-  --color-accent-deep:   oklch(32% 0.20 285);
-  --color-focus:         oklch(55% 0.15 280);
-  --color-card:          oklch(99% 0.005 80);
+  /* 米白色系 — 背景 */
+  --color-paper:         oklch(97% 0.012 85);
+  --color-paper-2:       oklch(94% 0.008 85);
+  --color-paper-3:       oklch(89% 0.006 85);
+  --color-rule:          oklch(86% 0.01 85);
+  --color-card:          oklch(99% 0.005 85);
+
+  /* 深蓝色系 — 文字 */
+  --color-ink:           oklch(12% 0.025 260);
+  --color-ink-2:         oklch(35% 0.025 260);
+  --color-ink-3:         oklch(50% 0.02 260);
+
+  /* 蓝色 — 主色 */
+  --color-accent:        oklch(54% 0.18 255);
+  --color-accent-2:      oklch(46% 0.18 255);
+  --color-accent-light:  oklch(78% 0.10 255);
+  --color-accent-deep:   oklch(28% 0.16 260);
+
+  /* 浅红 — 点缀色 */
+  --color-warm:          oklch(62% 0.15 25);
+  --color-warm-light:    oklch(82% 0.08 25);
+
+  --color-focus:         oklch(54% 0.18 255);
 
   /* 字体 */
   --font-display: "Noto Serif SC", "new-spirit", Georgia, serif;
@@ -70,20 +79,30 @@
 }
 
 .dark {
-  --color-paper:         oklch(10% 0.008 275);
-  --color-paper-2:       oklch(13% 0.008 275);
-  --color-paper-3:       oklch(18% 0.008 275);
-  --color-ink:           oklch(93% 0.008 80);
-  --color-ink-2:         oklch(70% 0.008 80);
-  --color-ink-3:         oklch(55% 0.008 80);
-  --color-rule:          oklch(22% 0.008 275);
-  --color-accent:        oklch(65% 0.16 280);
-  --color-accent-2:      oklch(56% 0.16 280);
-  --color-accent-light:  oklch(30% 0.12 280);
-  --color-accent-deep:   oklch(25% 0.15 285);
-  --color-card:          oklch(15% 0.008 275);
-  --color-focus:         oklch(65% 0.15 280);
-  --glass-bg: rgba(13, 13, 20, 0.82);
+  /* 深色背景 */
+  --color-paper:         oklch(10% 0.012 260);
+  --color-paper-2:       oklch(13% 0.012 260);
+  --color-paper-3:       oklch(18% 0.012 260);
+  --color-rule:          oklch(22% 0.008 260);
+  --color-card:          oklch(14% 0.012 260);
+
+  /* 浅色文字 */
+  --color-ink:           oklch(93% 0.005 85);
+  --color-ink-2:         oklch(70% 0.008 85);
+  --color-ink-3:         oklch(55% 0.008 85);
+
+  /* 蓝色 — 暗色模式提亮 */
+  --color-accent:        oklch(66% 0.16 255);
+  --color-accent-2:      oklch(56% 0.16 255);
+  --color-accent-light:  oklch(28% 0.12 255);
+  --color-accent-deep:   oklch(22% 0.14 260);
+
+  /* 浅红 — 暗色模式提亮 */
+  --color-warm:          oklch(72% 0.12 25);
+  --color-warm-light:    oklch(30% 0.10 25);
+
+  --color-focus:         oklch(66% 0.16 255);
+  --glass-bg: rgba(10, 13, 28, 0.82);
   --glass-border: rgba(255, 255, 255, 0.06);
   --glass-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
   --star-color: rgba(255, 255, 255, 0.35);
@@ -102,6 +121,8 @@
   --color-accent: var(--color-accent);
   --color-accent-hover: var(--color-accent-2);
   --color-accent-light: var(--color-accent-light);
+  --color-warm: var(--color-warm);
+  --color-warm-light: var(--color-warm-light);
   --color-border: var(--color-rule);
   --color-glass-bg: var(--glass-bg);
   --color-glass-border: var(--glass-border);
@@ -165,4 +186,16 @@ body {
   -webkit-backdrop-filter: saturate(180%) blur(16px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
+}
+
+/* ============================================================
+   手机端全局优化
+   ============================================================ */
+@media (max-width: 767px) {
+  button, a, [role="button"] {
+    min-height: 44px;
+  }
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
 }

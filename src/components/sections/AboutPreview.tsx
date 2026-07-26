@@ -25,7 +25,7 @@ export function AboutPreview() {
   const image = settingsImg || aboutPreviewData.image;
 
   return (
-    <section ref={ref} className="max-w-5xl mx-auto px-5 py-24 md:py-32">
+    <section ref={ref} className="max-w-5xl mx-auto px-5 py-24 md:py-32 max-md:py-16">
       {/* 标签 */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
@@ -33,8 +33,8 @@ export function AboutPreview() {
         transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         className="flex items-center gap-3 mb-4"
       >
-        <div className="h-px w-6" style={{ background: "var(--color-accent)" }} />
-        <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-accent)" }}>
+        <div className="h-px w-6" style={{ background: "var(--color-warm)" }} />
+        <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
           {aboutPreviewData.label}
         </span>
       </motion.div>
@@ -56,7 +56,7 @@ export function AboutPreview() {
         </h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
-          <div className="space-y-5 text-[16px] leading-relaxed" style={{ color: "var(--color-ink-2)" }}>
+          <div className="space-y-5 text-[16px] max-md:leading-[1.65] leading-relaxed" style={{ color: "var(--color-ink-2)" }}>
             <p
               className="text-[18px] font-semibold leading-snug"
               style={{ color: "var(--color-ink)" }}
@@ -66,7 +66,7 @@ export function AboutPreview() {
             <p>{aboutPreviewData.description}</p>
             <Link
               href="/about"
-              className="inline-flex items-center gap-2 text-[15px] font-medium transition-all duration-300 group"
+              className="inline-flex items-center justify-center gap-2 text-[15px] max-md:text-[17px] max-md:w-full font-medium transition-all duration-300 group max-md:py-3 max-md:px-5 max-md:rounded-xl max-md:bg-[var(--color-accent-light)] active:scale-[0.98]"
               style={{ color: "var(--color-accent)" }}
             >
               {aboutPreviewData.linkText}
@@ -75,7 +75,7 @@ export function AboutPreview() {
           </div>
 
           <div className="relative">
-            <div className="rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-500 aspect-[4/3] border"
+            <div className="max-md:rounded-lg rounded-xl overflow-hidden shadow-md hover:shadow-lg transition-shadow duration-500 aspect-[4/3] border"
               style={{ borderColor: "var(--color-accent-light)" }}
             >
               {image ? (

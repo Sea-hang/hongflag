@@ -95,9 +95,11 @@ export default function LoginPage() {
                 <button
                   key={item.role}
                   onClick={() => handleRoleSelect(item.role)}
-                  className="w-full flex items-center gap-4 bg-[var(--bg-secondary)] rounded-2xl px-5 py-4 hover:bg-[var(--bg-tertiary)] transition-colors text-left group"
+                  className="w-full flex items-center gap-4 bg-[var(--bg-secondary)] rounded-2xl max-md:px-4 max-md:py-3.5 px-5 py-4 hover:bg-[var(--bg-tertiary)] transition-colors text-left group active:scale-[0.98]"
                 >
-                  <span className="text-[32px]">{item.icon}</span>
+                  <span className="flex items-center justify-center w-11 h-11 rounded-xl text-[26px] max-md:text-[24px] max-md:w-10 max-md:h-10"
+                    style={{ background: "var(--color-accent-light)" }}
+                  >{item.icon}</span>
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
                       <span className="text-[16px] font-semibold text-[var(--text-primary)]">{item.title}</span>

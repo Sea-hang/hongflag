@@ -2,6 +2,18 @@ import { GlassNav } from "@/components/ui/GlassNav";
 import { Footer } from "@/components/ui/Footer";
 import { guideContent } from "@/data/guide-content";
 
+// 标题文本 → 锚点 ID
+function slugify(text: string): string {
+  // 去掉 Markdown 标题标记、去首尾空格、去掉 emoji
+  return text
+    .replace(/^[#\s]+/, "")
+    .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F1E0}-\u{1F1FF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}\u{FE00}-\u{FE0F}\u{200D}️]/gu, "")
+    .trim()
+    .replace(/[^\w一-鿿]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .toLowerCase();
+}
+
 // 简单的 Markdown → HTML 转换
 function renderMarkdown(md: string): string {
   let html = md;
@@ -13,11 +25,11 @@ function renderMarkdown(md: string): string {
   // 内联代码
   html = html.replace(/`([^`]+)`/g, '<code class="inline-code">$1</code>');
 
-  // 标题
-  html = html.replace(/^#### (.+)$/gm, '<h4>$1</h4>');
-  html = html.replace(/^### (.+)$/gm, '<h3>$1</h3>');
-  html = html.replace(/^## (.+)$/gm, '<h2>$1</h2>');
-  html = html.replace(/^# (.+)$/gm, '<h1>$1</h1>');
+  // 标题（带锚点 ID）
+  html = html.replace(/^#### (.+)$/gm, (_, title) => `<h4 id="${slugify(title)}">${title}</h4>`);
+  html = html.replace(/^### (.+)$/gm, (_, title) => `<h3 id="${slugify(title)}">${title}</h3>`);
+  html = html.replace(/^## (.+)$/gm, (_, title) => `<h2 id="${slugify(title)}">${title}</h2>`);
+  html = html.replace(/^# (.+)$/gm, (_, title) => `<h1 id="${slugify(title)}">${title}</h1>`);
 
   // 粗体
   html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
@@ -89,8 +101,8 @@ export default function GuidePage() {
           {/* 页面标题 */}
           <div className="mb-10 pb-8" style={{ borderBottom: "2px solid var(--color-rule)" }}>
             <div className="flex items-center gap-3 mb-3">
-              <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-accent)" }} />
-              <span className="text-[12px] font-medium tracking-[0.12em] uppercase text-[var(--color-accent)]">
+              <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-warm)" }} />
+              <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
                 入学指南
               </span>
             </div>
@@ -103,12 +115,22 @@ export default function GuidePage() {
           </div>
 
           <style>{`
+            html { scroll-behavior: smooth; }
+
             .guide-content {
               font-family: var(--font-body);
               color: var(--color-ink-2);
               line-height: 1.9;
               font-size: 15px;
             }
+
+            /* 锚点跳转不被导航挡住 */
+            .guide-content h2,
+            .guide-content h3,
+            .guide-content h4 {
+              scroll-margin-top: 100px;
+            }
+
             .guide-content h1 {
               font-family: var(--font-display);
               font-size: 28px;
@@ -125,15 +147,22 @@ export default function GuidePage() {
               color: var(--color-ink);
               margin-top: 44px;
               margin-bottom: 14px;
-              padding-bottom: 8px;
-              border-bottom: 1px solid var(--color-rule);
+              padding-bottom: 10px;
+              border-bottom: 2px solid var(--color-accent-light);
+              letter-spacing: -0.01em;
+            }
+            .guide-content h2:hover::after {
+              content: " #";
+              opacity: 0.3;
+              font-weight: 400;
+              font-size: 0.7em;
             }
             .guide-content h3 {
               font-family: var(--font-display);
-              font-size: 17px;
+              font-size: 18px;
               font-weight: 600;
               color: var(--color-ink);
-              margin-top: 32px;
+              margin-top: 36px;
               margin-bottom: 10px;
             }
             .guide-content h4 {
@@ -171,38 +200,92 @@ export default function GuidePage() {
             }
             .guide-content blockquote {
               border-left: 3px solid var(--color-accent);
-              padding: 12px 20px;
+              padding: 14px 22px;
               margin: 20px 0;
               background: var(--color-paper-2);
-              border-radius: 0 12px 12px 0;
+              border-radius: 0 14px 14px 0;
               color: var(--color-ink-2);
               font-size: 14px;
               font-style: italic;
             }
+            .guide-content blockquote strong {
+              color: var(--color-accent);
+            }
+
+            /* 无序列表 */
             .guide-content ul {
               list-style: none;
               padding: 0;
               margin: 12px 0 20px;
             }
-            .guide-content li {
+            .guide-content ul li {
               position: relative;
-              padding-left: 20px;
+              padding-left: 22px;
               color: var(--color-ink-2);
               line-height: 1.8;
               font-size: 15px;
               margin-bottom: 4px;
             }
-            .guide-content li::before {
+            .guide-content ul li::before {
               content: "";
               position: absolute;
               left: 4px;
               top: 11px;
-              width: 5px;
-              height: 5px;
+              width: 6px;
+              height: 6px;
               border-radius: 50%;
               background: var(--color-accent);
               opacity: 0.5;
             }
+
+            /* 有序列表（目录） */
+            .guide-content ol {
+              list-style: none;
+              counter-reset: guide-counter;
+              padding: 20px 24px;
+              margin: 24px 0;
+              background: var(--color-paper-2);
+              border-radius: 16px;
+              border: 1px solid var(--color-rule);
+            }
+            .guide-content ol li {
+              counter-increment: guide-counter;
+              position: relative;
+              padding: 8px 0 8px 36px;
+              color: var(--color-ink-2);
+              line-height: 1.6;
+              font-size: 15px;
+              border-bottom: 1px solid var(--color-rule);
+            }
+            .guide-content ol li:last-child {
+              border-bottom: none;
+            }
+            .guide-content ol li::before {
+              content: counter(guide-counter);
+              position: absolute;
+              left: 0;
+              top: 7px;
+              width: 24px;
+              height: 24px;
+              border-radius: 50%;
+              background: var(--color-accent-light);
+              color: var(--color-accent);
+              font-size: 12px;
+              font-weight: 700;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+            }
+            .guide-content ol li a {
+              text-decoration: none;
+              font-weight: 500;
+              transition: color 0.2s;
+            }
+            .guide-content ol li a:hover {
+              color: var(--color-accent-2);
+              text-decoration: underline;
+            }
+
             .guide-content table {
               width: 100%;
               border-collapse: collapse;
@@ -238,18 +321,20 @@ export default function GuidePage() {
               color: var(--color-ink);
             }
             .guide-content .inline-code {
-              background: var(--color-paper-2);
-              padding: 2px 7px;
+              background: var(--color-accent-light);
+              padding: 2px 8px;
               border-radius: 5px;
               font-size: 13px;
               color: var(--color-accent);
               font-family: var(--font-mono);
-              border: 1px solid var(--color-rule);
+              font-weight: 500;
             }
             @media (max-width: 640px) {
               .guide-content h1 { font-size: 24px; }
               .guide-content h2 { font-size: 19px; }
               .guide-content td:first-child { white-space: normal; }
+              .guide-content ol { padding: 16px; }
+              .guide-content ol li { padding-left: 32px; }
             }
           `}</style>
           <div

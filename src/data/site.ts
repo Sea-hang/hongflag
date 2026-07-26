@@ -27,6 +27,14 @@ export const site = {
   /** 版权声明 */
   copyright: "© 版权归制作者个人所有，未经允许不得转载",
 
+  // --- 社交媒体 ---
+  /** 抖音作品链接 */
+  douyinUrl: "https://v.douyin.com/JofbhTGpdRE/",
+  /** 微信公众号名称 */
+  wechatName: "宜阳县红旗实验学校",
+  /** 微信公众号主页链接 */
+  wechatUrl: "https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzU2MjEwNjk0Mw==",
+
   // --- 导航链接 ---
   /** 顶部导航栏的链接列表 */
   navLinks: [

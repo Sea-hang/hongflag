@@ -38,8 +38,8 @@ export default function ContactPage() {
             custom={0} initial="hidden" animate="visible" variants={fadeUp}
             className="flex items-center gap-3 mb-4"
           >
-            <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-accent)" }} />
-            <span className="text-[12px] font-medium tracking-[0.12em] uppercase text-[var(--color-accent)]">
+            <div className="h-[2px] w-6 rounded-full" style={{ background: "var(--color-warm)" }} />
+            <span className="text-[12px] font-medium tracking-[0.12em] uppercase" style={{ color: "var(--color-warm)" }}>
               {contactData.label}
             </span>
           </motion.div>
@@ -58,7 +58,7 @@ export default function ContactPage() {
             className="mt-8 p-6 rounded-2xl border-l-4"
             style={{
               background: "var(--color-paper-2)",
-              borderColor: "var(--color-accent)",
+              borderColor: "var(--color-warm)",
             }}
           >
             <p className="text-[15px] leading-relaxed" style={{ color: "var(--color-ink-2)" }}>
