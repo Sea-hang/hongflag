@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   // 安全检查：只允许微信图片域名
-  const allowed = ["mmbiz.qpic.cn", "mmbiz.qlogo.cn"];
+  const allowed = ["mmbiz.qpic.cn", "mmbiz.qlogo.cn", "mmecoa.qpic.cn"];
   try {
     const host = new URL(url).hostname;
     if (!allowed.some((d) => host.endsWith(d))) {

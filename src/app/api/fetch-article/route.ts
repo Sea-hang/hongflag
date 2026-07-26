@@ -87,12 +87,12 @@ function parseWechatHTML(html: string, url: string): ExtractedArticle {
   }
 
   // 4. 图片 — 只提取 URL，不下载
-  // 微信图片可能在 data-src、src、或 mmbiz.qpic.cn 链接中
+  // 微信图片可能在 data-src、src、或 mmbiz/mmecoa/qlogo.qpic.cn 链接中
   const seen = new Set<string>();
   const imgRegexes = [
-    /<img[^>]+data-src="(https?:\/\/mmbiz\.qpic\.cn\/[^"]+)"/gi,
-    /<img[^>]+src="(https?:\/\/mmbiz\.qpic\.cn\/[^"]+)"/gi,
-    /https?:\/\/mmbiz\.qpic\.cn\/[^\s"'<>&]+/gi,
+    /<img[^>]+data-src="(https?:\/\/(?:mmbiz|mmecoa)\.qpic\.cn\/[^"]+)"/gi,
+    /<img[^>]+src="(https?:\/\/(?:mmbiz|mmecoa)\.qpic\.cn\/[^"]+)"/gi,
+    /https?:\/\/(?:mmbiz|mmecoa)\.qpic\.cn\/[^\s"'<>&]+/gi,
   ];
   for (const regex of imgRegexes) {
     let m;
