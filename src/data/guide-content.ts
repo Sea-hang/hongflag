@@ -180,9 +180,9 @@ export const guideContent = `# 🏫 红旗实验学校网站 — 使用教程
 
 ### 方法一：开发模式预览（推荐日常使用 ⭐）
 
-```bash
+\`\`\`bash
 npm run dev
-```
+\`\`\`
 
 启动后浏览器打开 **http://localhost:3000**。代码改动保存后页面自动刷新，很方便。
 
@@ -190,9 +190,9 @@ npm run dev
 
 ### 方法二：线上版预览（最接近实际效果）
 
-```bash
+\`\`\`bash
 npm run preview
-```
+\`\`\`
 
 这个命令会构建 Cloudflare Workers 版本并在本地启动模拟环境，效果和正式部署几乎完全一样，能看到 KV 数据库里的真实数据。
 
@@ -214,9 +214,9 @@ npm run preview
 
 ### 方法一：一键完整部署（推荐 ⭐）
 
-```bash
+\`\`\`bash
 npm run deploy
-```
+\`\`\`
 
 这条命令**自动完成 4 个步骤**：Git 提交 → 推送到 GitHub → 构建 → 上传到 Cloudflare。
 
@@ -224,7 +224,7 @@ npm run deploy
 
 ### 方法二：自定义 Git 提交 + 部署
 
-```bash
+\`\`\`bash
 # 第 1 步：自己提交
 git add -A
 git commit -m "你的提交说明"
@@ -232,7 +232,7 @@ git push
 
 # 第 2 步：构建并部署
 npm run deploy:ci
-```
+\`\`\`
 
 \`deploy:ci\` 只做构建和上传，不做 Git 操作。
 
@@ -244,13 +244,13 @@ npm run deploy:ci
 
 ### 部署失败怎么办？
 
-```bash
+\`\`\`bash
 # 先检查代码有没有语法错误
 npm run build
 
 # 构建通过后再部署
 npm run deploy:ci
-```
+\`\`\`
 
 ---
 
