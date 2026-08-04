@@ -202,8 +202,9 @@ export default function ActivitiesPage() {
                   </div>
                   <div className="rounded-2xl max-md:p-4 p-6 divide-y"
                     style={{
-                      background: "var(--color-paper-2)",
+                      background: "var(--color-card)",
                       border: "1px solid var(--color-rule)",
+                      boxShadow: "0 2px 12px rgba(0, 0, 0, 0.04)",
                     }}
                   >
                     {notices.map((a, i) => (

@@ -8,10 +8,12 @@ import { ThemeToggle } from "./ThemeToggle";
 import { cn } from "@/lib/utils";
 import { site } from "@/data/site";
 import { useAuth } from "@/lib/auth";
+import { WeChatPopup } from "./WeChatPopup";
 
 export function GlassNav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [wechatOpen, setWechatOpen] = useState(false);
   const pathname = usePathname();
   const { isTeacher } = useAuth();
 
@@ -91,15 +93,15 @@ export function GlassNav() {
                 <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.52 2.89 2.89 0 0 1-2.88-2.89 2.89 2.89 0 0 1 2.88-2.89c.27 0 .53.04.78.1v-3.5a6.34 6.34 0 0 0-.78-.05A6.34 6.34 0 0 0 3 15.3a6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.34-6.34V8.72a8.23 8.23 0 0 0 4.47 1.48v-3.5a4.8 4.8 0 0 1-.56-.01z"/>
               </svg>
             </a>
-            <a href={site.wechatUrl} target="_blank" rel="noopener noreferrer"
-              onClick={(e) => e.stopPropagation()}
-              className="inline-flex items-center justify-center w-7 h-7 rounded-md hover:bg-[var(--color-paper-2)] transition-colors"
+            <button
+              onClick={(e) => { e.stopPropagation(); setWechatOpen(true); }}
+              className="inline-flex items-center justify-center w-7 h-7 rounded-md hover:bg-[var(--color-paper-2)] transition-colors cursor-pointer"
               title="微信公众号：宜阳县红旗实验学校"
             >
               <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor" style={{ color: "var(--color-ink-2)" }}>
                 <path d="M8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm7 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM12 2C6.48 2 2 6.48 2 12c0 1.93.55 3.72 1.5 5.26L2 22l4.93-1.52C8.2 21.42 10.04 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.73 0-3.36-.5-4.76-1.36l-.34-.2-3.05.94.93-3.04-.22-.36A7.96 7.96 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/>
               </svg>
-            </a>
+            </button>
           </div>
 
           {/* 桌面端链接 */}
@@ -253,16 +255,16 @@ export function GlassNav() {
                 </svg>
                 抖音
               </a>
-              <a href={site.wechatUrl} target="_blank" rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-[13px] py-2 px-3 rounded-xl hover:bg-[var(--color-paper-2)] transition-colors"
+              <button
+                className="flex items-center gap-1.5 text-[13px] py-2 px-3 rounded-xl hover:bg-[var(--color-paper-2)] transition-colors cursor-pointer"
                 style={{ color: "var(--color-ink-2)" }}
-                onClick={() => setOpen(false)}
+                onClick={() => { setOpen(false); setWechatOpen(true); }}
               >
                 <svg viewBox="0 0 24 24" className="w-4 h-4" fill="currentColor">
                   <path d="M8.5 11a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zm7 0a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3zM12 2C6.48 2 2 6.48 2 12c0 1.93.55 3.72 1.5 5.26L2 22l4.93-1.52C8.2 21.42 10.04 22 12 22c5.52 0 10-4.48 10-10S17.52 2 12 2zm0 18c-1.73 0-3.36-.5-4.76-1.36l-.34-.2-3.05.94.93-3.04-.22-.36A7.96 7.96 0 0 1 4 12c0-4.41 3.59-8 8-8s8 3.59 8 8-3.59 8-8 8z"/>
                 </svg>
                 公众号
-              </a>
+              </button>
             </div>
           </motion.div>
         )}
@@ -276,6 +278,13 @@ export function GlassNav() {
           />
         )}
       </AnimatePresence>
+
+      {/* 微信二维码弹窗 */}
+      <WeChatPopup
+        open={wechatOpen}
+        onClose={() => setWechatOpen(false)}
+        wechatUrl={site.wechatUrl}
+      />
     </>
   );
 }

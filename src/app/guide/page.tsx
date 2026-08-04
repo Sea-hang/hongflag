@@ -202,11 +202,12 @@ export default function GuidePage() {
               border-left: 3px solid var(--color-accent);
               padding: 14px 22px;
               margin: 20px 0;
-              background: var(--color-paper-2);
+              background: var(--color-card);
               border-radius: 0 14px 14px 0;
               color: var(--color-ink-2);
               font-size: 14px;
               font-style: italic;
+              box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
             }
             .guide-content blockquote strong {
               color: var(--color-accent);
@@ -244,9 +245,10 @@ export default function GuidePage() {
               counter-reset: guide-counter;
               padding: 20px 24px;
               margin: 24px 0;
-              background: var(--color-paper-2);
+              background: var(--color-card);
               border-radius: 16px;
               border: 1px solid var(--color-rule);
+              box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
             }
             .guide-content ol li {
               counter-increment: guide-counter;
@@ -307,7 +309,7 @@ export default function GuidePage() {
               background: var(--color-paper-2);
             }
             .guide-content .code-block {
-              background: var(--color-paper-2);
+              background: var(--color-card);
               border: 1px solid var(--color-rule);
               border-radius: 12px;
               padding: 16px 20px;
@@ -316,6 +318,7 @@ export default function GuidePage() {
               font-size: 13px;
               line-height: 1.7;
               font-family: var(--font-mono);
+              box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
             }
             .guide-content .code-block code {
               color: var(--color-ink);

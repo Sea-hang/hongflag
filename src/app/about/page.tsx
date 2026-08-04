@@ -147,8 +147,9 @@ export default function AboutPage() {
                   variants={fadeUp}
                   className="rounded-2xl p-7 text-center transition-all duration-300 hover:-translate-y-1 border"
                   style={{
-                    background: "var(--color-paper-2)",
+                    background: "var(--color-card)",
                     borderColor: "var(--color-rule)",
+                    boxShadow: "0 2px 12px rgba(0, 0, 0, 0.04)",
                   }}
                 >
                   <div

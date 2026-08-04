@@ -32,7 +32,7 @@ export function StackedBooks() {
   if (books.length === 0) return null;
 
   return (
-    <section className="py-24 md:py-32">
+    <section className="section-panel-alt py-24 md:py-32">
       <div className="max-w-5xl mx-auto px-5">
         {/* 简洁的顶部标签 */}
         <div className="flex items-center gap-3 mb-3 justify-center">

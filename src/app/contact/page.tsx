@@ -55,9 +55,8 @@ export default function ContactPage() {
           {/* 信笺问候语 */}
           <motion.div
             custom={2} initial="hidden" animate="visible" variants={fadeUp}
-            className="mt-8 p-6 rounded-2xl border-l-4"
+            className="mt-8 p-6 rounded-2xl border-l-4 content-card"
             style={{
-              background: "var(--color-paper-2)",
               borderColor: "var(--color-warm)",
             }}
           >

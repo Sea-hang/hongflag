@@ -53,7 +53,7 @@ export function ActivitiesPreview() {
   const rest = filtered.slice(1);
 
   return (
-    <section ref={ref} className="py-24 md:py-32">
+    <section ref={ref} className="section-panel py-24 md:py-32">
       <div className="max-w-5xl mx-auto px-5">
         {/* 标题 */}
         <motion.div

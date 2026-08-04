@@ -341,7 +341,7 @@ export default function AdminPage() {
 
           {/* ===== 添加活动 ===== */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
-            className="bg-[var(--bg-secondary)] rounded-3xl p-6 mb-10"
+            className="bg-[var(--bg-secondary)] rounded-3xl p-6 mb-10 shadow-sm dark:shadow-[0_2px_20px_rgba(0,0,0,0.3)] border border-[var(--border)]"
           >
             <form onSubmit={handleAdd} className="space-y-4">
               {/* 类型切换 */}
@@ -450,7 +450,7 @@ export default function AdminPage() {
 
           {/* ===== 图片设置 ===== */}
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
-            className="bg-[var(--bg-secondary)] rounded-3xl p-6 mb-10"
+            className="bg-[var(--bg-secondary)] rounded-3xl p-6 mb-10 shadow-sm dark:shadow-[0_2px_20px_rgba(0,0,0,0.3)] border border-[var(--border)]"
           >
             <h2 className="text-[18px] font-semibold text-[var(--text-primary)] mb-5">🖼️ 图片设置</h2>
             <p className="text-[13px] text-[var(--text-tertiary)] mb-4">把图片放到 public/uploads/activities/ 文件夹，然后在下方填写路径。留空则使用默认样式。</p>

@@ -134,8 +134,9 @@ export function ActivityCard({
       whileHover={{ y: -3 }}
       className="block max-md:rounded-xl rounded-2xl overflow-hidden group transition-all duration-300 border active:scale-[0.98]"
       style={{
-        background: "var(--color-paper)",
+        background: "var(--color-card)",
         borderColor: "var(--color-rule)",
+        boxShadow: "0 2px 12px rgba(0, 0, 0, 0.04)",
       }}
     >
       {/* 图片区 */}
